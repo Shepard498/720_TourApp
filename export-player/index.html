@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__PROJECT_TITLE__</title>
+  <link rel="stylesheet" href="app-files/style.css">
+</head>
+<body>
+  <div class="layout">
+    <main class="viewer">
+      <div class="viewer-chrome">
+        <div class="viewer-chrome__left">
+          <button class="overlay-toggle" id="sceneToggle" type="button" aria-controls="sceneSidebar" aria-expanded="false">Escenas</button>
+          <div class="topbar">
+            <h2 id="sceneTitle"></h2>
+          </div>
+        </div>
+        <div class="viewer-actions">
+          <button class="overlay-toggle overlay-toggle--icon" id="viewerSettingsToggle" type="button" aria-expanded="false" aria-label="Ajustes">&#9881;</button>
+          <button class="overlay-toggle overlay-toggle--icon" id="fullscreenToggle" type="button" aria-pressed="false" aria-label="Pantalla completa">&#9974;</button>
+        </div>
+      </div>
+      <aside class="viewer-settings" id="viewerSettingsPanel" hidden>
+        <div>
+          <p class="viewer-settings__eyebrow">Ajustes</p>
+          <h3>Visor</h3>
+        </div>
+        <label class="viewer-settings__field">
+          <span>Volumen general</span>
+          <input id="viewerSettingsVolume" type="range" min="0" max="100" step="1">
+        </label>
+        <label class="viewer-settings__field viewer-settings__field--checkbox">
+          <span><input id="viewerSettingsMute" type="checkbox"> Silenciar audio</span>
+        </label>
+        <p class="viewer-settings__status" id="viewerSettingsStatus">Sin audio ambiente activo.</p>
+      </aside>
+      <button class="overlay-backdrop" id="sceneBackdrop" type="button" aria-label="Cerrar lista de escenas" hidden></button>
+      <aside class="sidebar" id="sceneSidebar" aria-label="Lista de escenas">
+        <div class="sidebar__header">
+          <div>
+            <h1 id="projectTitle">__PROJECT_TITLE__</h1>
+            <p>Selecciona una escena del tour.</p>
+          </div>
+          <button class="sidebar__close" id="sceneClose" type="button" aria-label="Cerrar">Cerrar</button>
+        </div>
+        <div class="scene-list" id="sceneList"></div>
+      </aside>
+      <div class="viewer-stage" id="viewerStage">
+        <div id="pano"></div>
+        <div class="viewer-stage__markers" id="markerOverlay" hidden aria-label="Hotspots"></div>
+        <aside class="info-marker-display" id="infoMarkerDisplay" hidden>
+          <div id="infoMarkerDisplayBody"></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <script src="app-files/marzipano.js"></script>
+  <script src="app-files/data.js"></script>
+  <script src="app-files/index.js"></script>
+</body>
+</html>

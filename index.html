@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drone360 Tour Builder</title>
+  <link rel="icon" href="./TourBuilderAppIcon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <button class="mobile-drawer-backdrop" id="mobile-drawer-backdrop" type="button" aria-label="Cerrar paneles móviles" hidden></button>
+
+    <aside class="hub interface" aria-label="Navegación principal">
+      <div class="mobile-drawer-header">
+        <button class="mobile-drawer-close" id="mobile-hub-close" type="button" aria-label="Cerrar navegación">×</button>
+        <p class="mobile-drawer-header__label">Secciones</p>
+      </div>
+      <div class="hub__brand">
+        <h1>Tour Builder</h1>
+        <p class="hub__subtitle">Editor base.</p>
+      </div>
+
+      <nav class="hub__tabs scroll-fade" aria-label="Secciones del editor">
+        <button class="hub-tab" type="button" data-tab="instrucciones">
+          <span class="hub-tab__label">Instrucciones</span>
+        </button>
+        <button class="hub-tab is-active" type="button" data-tab="comandos">
+          <span class="hub-tab__label">Comandos</span>
+        </button>
+        <button class="hub-tab" type="button" data-tab="proyecto">
+          <span class="hub-tab__label">Proyecto</span>
+        </button>
+        <button class="hub-tab" type="button" data-tab="escenas">
+          <span class="hub-tab__label">Escenas</span>
+        </button>
+        <button class="hub-tab" type="button" data-tab="marcadores">
+          <span class="hub-tab__label">Marcadores</span>
+        </button>
+        <button class="hub-tab" type="button" data-tab="efectos">
+          <span class="hub-tab__label">Efectos</span>
+        </button>
+        <button class="hub-tab" type="button" data-tab="mapa">
+          <span class="hub-tab__label">Mapa</span>
+        </button>
+      </nav>
+
+      <div class="hub__footer">
+        <p id="scene-counter">0 escenas cargadas</p>
+      </div>
+    </aside>
+
+    <aside class="side-panel interface" aria-live="polite">
+      <div class="mobile-drawer-header">
+        <button class="mobile-drawer-close" id="mobile-panel-close" type="button" aria-label="Cerrar panel">×</button>
+        <p class="mobile-drawer-header__label">Panel activo</p>
+      </div>
+      <section class="panel-view" data-panel="instrucciones">
+        <div class="panel-view__header">
+          <button class="panel-view__help" type="button" data-help-panel="instrucciones" aria-label="Ayuda de instrucciones">?</button>
+          <h2>Instrucciones</h2>
+          <p>Aquí encontrarás recorridos guiados para aprender las funciones principales del editor y repasar cada flujo de trabajo cuando lo necesites.</p>
+        </div>
+
+        <div class="command-grid">
+          <button class="command-card" id="start-workflow-tutorial" type="button">
+            <strong>Cómo comenzar (Workflow)</strong>
+            <span>Recorre el flujo recomendado para crear tu primer tour 360 de principio a fin.</span>
+          </button>
+          <button class="command-card" id="start-project-config-tutorial" type="button">
+            <strong>Configurar proyecto</strong>
+            <span>Aprende para qué sirven el nombre del proyecto, el FOV y los ajustes globales del tour.</span>
+          </button>
+          <button class="command-card" id="start-import-scenes-tutorial" type="button">
+            <strong>Importar escenas</strong>
+            <span>Descubre cómo importar panoramas, organizarlos y preparar la base visual del tour.</span>
+          </button>
+          <button class="command-card" id="start-markers-tutorial" type="button">
+            <strong>Añadir marcadores</strong>
+            <span>Aprende a crear, ubicar y configurar hotspots link e info sobre tus escenas.</span>
+          </button>
+          <button class="command-card" id="start-effects-tutorial" type="button">
+            <strong>Añadir efectos</strong>
+            <span>Aprende a crear efectos light y ajustar su apariencia directamente sobre la escena.</span>
+          </button>
+          <button class="command-card" id="start-save-load-tutorial" type="button">
+            <strong>Guardar/Importar/Exportar proyecto</strong>
+            <span>Aprende a guardar tu trabajo, importar proyectos previos y exportar la versión final del tour.</span>
+          </button>
+          <button class="command-card" id="start-nodemap-tutorial" type="button">
+            <strong>Editor rápido (Nodemap)</strong>
+            <span>Descubre cómo usar el nodemap para editar escenas, conexiones y accesos rápidos de forma visual.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="panel-view is-active" data-panel="comandos">
+        <div class="panel-view__header">
+          <button class="panel-view__help" type="button" data-help-panel="comandos" aria-label="Ayuda de comandos">?</button>
+          <h2>Comandos</h2>
+          <p>Acciones generales para guardar, recuperar, exportar o limpiar el tour.</p>
+        </div>
+
+        <div class="panel-view__body scroll-fade">
+          <div class="command-grid">
+            <button class="command-card" id="save-project" type="button">
+              <strong>Guardar</strong>
+              <span>Descarga un paquete del proyecto con la configuración y los archivos necesarios para restaurarlo.</span>
+            </button>
+            <button class="command-card" id="load-project" type="button">
+              <strong>Importar</strong>
+              <span>Carga un paquete del proyecto o un JSON anterior y restaura el editor.</span>
+            </button>
+            <button class="command-card" id="export-project" type="button">
+              <strong>Exportar</strong>
+              <span>Prepara el player standalone y los archivos procesados.</span>
+            </button>
+            <button class="command-card command-card--danger" id="reset-project" type="button">
+              <strong>Borrar</strong>
+              <span>Elimina el estado actual del tour y deja el editor en blanco.</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-view" data-panel="proyecto">
+        <div class="panel-view__header">
+          <button class="panel-view__help" type="button" data-help-panel="proyecto" aria-label="Ayuda de proyecto">?</button>
+          <h2>Proyecto</h2>
+          <p>Placeholder para la configuración general del proyecto.</p>
+        </div>
+
+        <div class="panel-view__body scroll-fade">
+          <label class="field">
+            <span>Nombre</span>
+            <input id="project-name" name="project-name" type="text" placeholder="Mi tour 360" />
+          </label>
+
+          <div class="field-row">
+            <label class="field">
+              <span>FOV mínimo (grados)</span>
+              <input id="project-fov-min" name="project-fov-min" type="number" min="1" max="179" step="1" />
+            </label>
+
+            <label class="field">
+              <span>FOV máximo (grados)</span>
+              <input id="project-fov-max" name="project-fov-max" type="number" min="1" max="179" step="1" />
+            </label>
+          </div>
+
+          <div class="placeholder-card ambient-audio-card">
+            <strong>Audio ambiente del proyecto</strong>
+            <p id="project-ambient-audio-summary">No hay audio ambiente cargado para el proyecto.</p>
+            <label class="field field--compact">
+              <span>Volumen inicial</span>
+              <input id="project-ambient-audio-volume" name="project-ambient-audio-volume" type="range" min="0" max="100" step="1" />
+            </label>
+            <div class="field-row ambient-audio-card__timing-row">
+              <label class="field field--compact ambient-audio-card__timing-field">
+                <span>Transición (ms)</span>
+                <input id="project-ambient-audio-transition" name="project-ambient-audio-transition" type="number" min="0" max="10000" step="50" />
+              </label>
+              <label class="field field--compact ambient-audio-card__timing-field">
+                <span>Offset (-1 a 1)</span>
+                <input id="project-ambient-audio-offset" name="project-ambient-audio-offset" type="text" inputmode="decimal" placeholder="0,0" />
+              </label>
+            </div>
+            <label class="field ambient-audio-card__offset-slider">
+              <span>Ajuste rápido de offset</span>
+              <input id="project-ambient-audio-offset-slider" name="project-ambient-audio-offset-slider" type="range" min="-1" max="1" step="0.05" />
+            </label>
+            <label class="field field--checkbox ambient-audio-card__mode-toggle">
+              <span>
+                <input id="project-ambient-audio-background" name="project-ambient-audio-background" type="checkbox" />
+                Superponer audio de fondo
+              </span>
+            </label>
+            <div class="scene-config-overlay__actions scene-config-overlay__actions--start">
+              <button class="scene-config-overlay__action scene-config-overlay__action--primary-ghost" id="project-ambient-audio-select" type="button">Seleccionar MP3</button>
+              <button class="scene-config-overlay__action" id="project-ambient-audio-clear" type="button">Quitar</button>
+            </div>
+          </div>
+
+          <div class="placeholder-card">
+            <strong>Próximamente</strong>
+            <p>Acá podemos agregar slug, portada, ajustes globales y parámetros de exportación.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel-view" data-panel="escenas">
+        <div class="panel-view__top">
+          <div class="panel-view__header">
+            <button class="panel-view__help" type="button" data-help-panel="escenas" aria-label="Ayuda de escenas">?</button>
+            <h2>Escenas</h2>
+            <p>Importa panoramas y organízalos como lista para el tour.</p>
+          </div>
+
+          <button class="primary-action" id="import-scenes" type="button">&#8990;&nbsp;&#8989; Importar escenas</button>
+        </div>
+
+        <div class="scene-list" id="scene-list" aria-label="Lista de escenas"></div>
+      </section>
+
+
+      <section class="panel-view" data-panel="marcadores">
+        <div class="panel-view__top">
+          <div class="panel-view__header">
+            <button class="panel-view__help" type="button" data-help-panel="marcadores" aria-label="Ayuda de marcadores">?</button>
+            <h2>Marcadores</h2>
+            <p>Crea marcadores sobre la escena activa y organízalos como lista para el tour.</p>
+          </div>
+
+          <div class="marker-actions" aria-label="Crear marcadores">
+            <button class="primary-action" id="create-link-marker" type="button">&#10148; Link</button>
+            <button class="primary-action" id="create-info-marker" type="button">&#9436; Media</button>
+          </div>
+        </div>
+
+        <div class="marker-list" id="marker-list" aria-label="Lista de marcadores"></div>
+      </section>
+
+      <section class="panel-view" data-panel="mapa">
+        <div class="panel-view__top">
+          <div class="panel-view__header">
+            <button class="panel-view__help" type="button" data-help-panel="mapa" aria-label="Ayuda de mapa">?</button>
+            <h2>Mapa</h2>
+            <p>Visualiza escenas y conexiones como un mapa de nodos para navegar y ordenar el recorrido.</p>
+          </div>
+
+          <div class="node-map__actions" aria-label="Acciones rapidas del mapa">
+            <button class="node-map__action" id="node-map-create-scene" type="button" aria-label="Importar escenas" title="Importar escenas">&#8990;&#8989;</button>
+            <button class="node-map__action" id="node-map-create-link" type="button" aria-label="Agregar hotspot link" title="Agregar hotspot link">&#10148;</button>
+            <button class="node-map__action" id="node-map-create-info" type="button" aria-label="Agregar hotspot media" title="Agregar hotspot media">&#9436;</button>
+            <button class="node-map__action" id="node-map-create-light" type="button" aria-label="Agregar efecto light" title="Agregar efecto light">&#10022;</button>
+            <button class="node-map__action" id="node-map-create-sound" type="button" aria-label="Agregar efecto sound" title="Agregar efecto sound">&#9835;</button>
+          </div>
+        </div>
+
+        <div class="node-map" id="node-map" aria-label="Mapa de nodos del tour">
+          <div class="node-map__viewport" id="node-map-viewport">
+            <svg class="node-map__edges" id="node-map-edges" aria-hidden="true"></svg>
+            <div class="node-map__surface" id="node-map-surface"></div>
+            <svg class="node-map__edges node-map__edges--draft" id="node-map-draft-edges" aria-hidden="true"></svg>
+          </div>
+        </div>
+        <button class="node-map__home" id="node-map-home" type="button" aria-label="Centrar mapa en nodos" title="Centrar mapa en nodos">&#8962;</button>
+      </section>
+
+      <section class="panel-view" data-panel="efectos">
+        <div class="panel-view__top">
+          <div class="panel-view__header">
+            <button class="panel-view__help" type="button" data-help-panel="efectos" aria-label="Ayuda de efectos">?</button>
+            <h2>Efectos</h2>
+            <p>Agrega luces y focos sonoros sobre la escena para sumar brillos visuales o puntos de audio direccional.</p>
+          </div>
+
+          <div class="marker-actions" aria-label="Crear efectos">
+            <button class="primary-action" id="create-light-marker" type="button">&#10022; Light</button>
+            <button class="primary-action" id="create-sound-marker" type="button">&#9835; Sound</button>
+          </div>
+        </div>
+
+        <div class="marker-list" id="effect-list" aria-label="Lista de efectos"></div>
+      </section>
+    </aside>
+
+    <button class="workspace-splitter" id="workspace-splitter" type="button" aria-label="Redimensionar panel del mapa" title="Redimensionar panel del mapa"></button>
+
+    <main class="workspace">
+      <section class="viewer-shell">
+        <div class="viewer-shell__header">
+          <div>
+            <p class="viewer-shell__eyebrow">Viewport</p>
+            <h2 id="viewer-title">Sin escena seleccionada</h2>
+          </div>
+          <div class="viewer-shell__tools">
+            <div class="viewer-meta">
+              <span id="viewer-mode">16:9</span>
+              <span id="viewer-detail">Esperando panoramas</span>
+              <span id="viewer-coordinates">Yaw 0.0 deg | Pitch 0.0 deg | FOV 90.0 deg</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="viewer-frame">
+          <div class="mobile-viewer-actions" aria-label="Controles móviles">
+            <button class="mobile-viewer-action" id="mobile-hub-toggle" type="button" aria-label="Abrir secciones" aria-expanded="false">Secciones</button>
+            <button class="mobile-viewer-action" id="mobile-panel-toggle" type="button" aria-label="Abrir panel activo" aria-expanded="false">Panel</button>
+            <button class="mobile-viewer-action" id="mobile-config-toggle" type="button" aria-label="Ocultar configuraciÃ³n del visor" aria-pressed="false">Config</button>
+          </div>
+          <div id="viewer-stage" class="viewer-stage" aria-label="Vista previa del tour">
+            <div id="pano" class="viewer-stage__pano" hidden></div>
+            <div id="alignment-pano" class="viewer-stage__pano viewer-stage__pano--alignment" hidden></div>
+            <div id="light-overlay" class="viewer-stage__lights" hidden aria-hidden="true"></div>
+            <div id="marker-overlay" class="viewer-stage__markers" hidden aria-label="Marcadores en escena"></div>
+            <aside id="info-marker-display" class="info-marker-display" hidden>
+              <div id="info-marker-display-body"></div>
+            </aside>
+            <div class="viewer-stage__empty" id="empty-state">
+              <p class="viewer-stage__kicker">Editor inicial</p>
+              <h3>Carga tu primera escena para empezar</h3>
+              <p>Cuando importes panoramas, este viewport mostrará la escena activa en formato 16:9.</p>
+            </div>
+          </div>
+          <aside class="scene-config-overlay viewer-config-overlay" id="scene-config-overlay" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Escena</p>
+                <h3 id="scene-config-title">Configuración</h3>
+              </div>
+              <div class="scene-config-overlay__header-actions">
+                <button class="scene-action" id="scene-config-start" type="button" aria-label="Definir como escena inicial">1&ordm;</button>
+                <button class="scene-action scene-action--danger scene-config-overlay__delete" id="scene-config-delete" type="button" aria-label="Borrar escena">&#128465;</button>
+              </div>
+            </div>
+
+            <label class="field">
+              <span>Nombre de la escena</span>
+              <input id="scene-config-name" name="scene-config-name" type="text" />
+            </label>
+
+            <div class="field-row field-row--triple">
+              <label class="field">
+                <span>Yaw</span>
+                <input id="scene-config-yaw" name="scene-config-yaw" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>Pitch</span>
+                <input id="scene-config-pitch" name="scene-config-pitch" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>FOV</span>
+                <input id="scene-config-fov" name="scene-config-fov" type="number" step="0.1" />
+              </label>
+            </div>
+            <div class="scene-config-overlay__actions">
+              <button class="scene-config-overlay__action" id="scene-config-current-view" type="button">Fijar vista original</button>
+            </div>
+
+            <div class="placeholder-card ambient-audio-card ambient-audio-card--scene">
+              <strong>Audio ambiente de la escena</strong>
+              <p id="scene-ambient-audio-summary">Esta escena usar? el audio del proyecto si existe.</p>
+              <label class="field field--compact">
+                <span>Volumen inicial</span>
+                <input id="scene-ambient-audio-volume" name="scene-ambient-audio-volume" type="range" min="0" max="100" step="1" />
+              </label>
+              <label class="field field--checkbox ambient-audio-card__mode-toggle">
+                <span class="field__checkbox">
+                  <input id="scene-ambient-audio-sync-timeline" name="scene-ambient-audio-sync-timeline" type="checkbox" />
+                  <span>Sincronizar con tiempo del proyecto</span>
+                </span>
+              </label>
+              <div class="scene-config-overlay__actions scene-config-overlay__actions--start">
+                <button class="scene-config-overlay__action scene-config-overlay__action--primary-ghost" id="scene-ambient-audio-select" type="button">Seleccionar MP3</button>
+                <button class="scene-config-overlay__action" id="scene-ambient-audio-clear" type="button">Quitar</button>
+              </div>
+            </div>
+          </aside>
+
+          <aside class="scene-config-overlay viewer-config-overlay" id="info-marker-config-overlay" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Marcador media</p>
+                <h3 id="info-marker-config-title">Configuración</h3>
+              </div>
+              <button class="scene-action scene-action--danger scene-config-overlay__delete" id="info-marker-config-delete" type="button" aria-label="Borrar marcador info">&#128465;</button>
+            </div>
+
+            <label class="field">
+              <span>Nombre</span>
+              <input id="info-marker-config-name" name="info-marker-config-name" type="text" />
+            </label>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Yaw</span>
+                <input id="info-marker-config-yaw" name="info-marker-config-yaw" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>Pitch</span>
+                <input id="info-marker-config-pitch" name="info-marker-config-pitch" type="number" step="0.1" />
+              </label>
+            </div>
+
+            <div class="field">
+              <span>Contenido</span>
+              <div class="info-marker-content-preview info-marker-config-preview" id="info-marker-config-preview-body">Todavía no hay contenido.</div>
+            </div>
+
+            <label class="field field--checkbox">
+              <span>
+                <input id="info-marker-config-preview-in-tab" name="info-marker-config-preview-in-tab" type="checkbox" />
+                Mostrar popup
+              </span>
+            </label>
+
+            <div class="scene-config-overlay__actions">
+              <button class="scene-config-overlay__action" id="info-marker-config-content" type="button">Editar contenido</button>
+            </div>
+          </aside>
+
+          <aside class="scene-config-overlay viewer-config-overlay" id="info-marker-content-overlay" data-responsive-sizing="css" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Contenido media</p>
+                <h3 id="info-marker-content-title">Editar contenido</h3>
+              </div>
+            </div>
+
+            <div class="info-marker-content-layout">
+              <div class="info-marker-content-sidebar">
+                <div class="field info-marker-content-preview-field">
+                  <span>Preview</span>
+                  <div class="info-marker-content-preview-shell">
+                    <div class="info-marker-content-preview-viewport">
+                    <div class="info-marker-content-preview" id="info-marker-content-preview-body">Todavía no hay contenido.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <input class="file-input file-input--image" id="info-marker-content-image" name="info-marker-content-image" type="file" accept="image/*,video/mp4,video/webm,audio/mpeg,audio/mp4,audio/ogg,audio/wav,.mp4,.webm,.mp3,.m4a,.ogg,.wav" hidden />
+                <div class="scene-config-overlay__actions scene-config-overlay__actions--start info-marker-content-media-actions">
+                  <button class="scene-config-overlay__action scene-config-overlay__action--primary-ghost" id="info-marker-content-image-select" type="button">Seleccionar contenido</button>
+                  <button class="scene-config-overlay__action" id="info-marker-content-image-clear" type="button">Quitar contenido</button>
+                </div>
+              </div>
+
+              <div class="info-marker-content-controls">
+                <div class="field">
+                  <span id="info-marker-content-input-label">Texto</span>
+                  <div class="quill-shell">
+                    <div id="info-marker-content-toolbar">
+                      <span class="ql-formats">
+                        <button class="ql-bold" type="button" aria-label="Negrita"></button>
+                        <button class="ql-italic" type="button" aria-label="Italica"></button>
+                        <button class="ql-underline" type="button" aria-label="Subrayado"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-list" value="ordered" type="button" aria-label="Lista numerada"></button>
+                        <button class="ql-list" value="bullet" type="button" aria-label="Lista con viñetas"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-clean" type="button" aria-label="Limpiar formato"></button>
+                      </span>
+                      <span class="info-marker-content-toolbar-tools">
+                        <span class="info-marker-content-toolbar-group">
+                          <div class="icon-toggle-group icon-toggle-group--toolbar" id="info-marker-content-text-align" role="group" aria-label="Alineacion horizontal del texto">
+                            <button class="icon-toggle" type="button" data-align-target="text" data-align-value="left" aria-label="Texto a la izquierda" title="Texto a la izquierda">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 6h13"></path>
+                                <path d="M4 10h9"></path>
+                                <path d="M4 14h13"></path>
+                                <path d="M4 18h9"></path>
+                              </svg>
+                            </button>
+                            <button class="icon-toggle" type="button" data-align-target="text" data-align-value="center" aria-label="Texto centrado" title="Texto centrado">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M6 6h12"></path>
+                                <path d="M8 10h8"></path>
+                                <path d="M6 14h12"></path>
+                                <path d="M8 18h8"></path>
+                              </svg>
+                            </button>
+                            <button class="icon-toggle" type="button" data-align-target="text" data-align-value="right" aria-label="Texto a la derecha" title="Texto a la derecha">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M7 6h13"></path>
+                                <path d="M11 10h9"></path>
+                                <path d="M7 14h13"></path>
+                                <path d="M11 18h9"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </span>
+                        <span class="info-marker-content-toolbar-group">
+                          <div class="icon-toggle-group icon-toggle-group--toolbar is-compact" id="info-marker-content-text-vertical-align" role="group" aria-label="Alineacion vertical del texto">
+                            <button class="icon-toggle" type="button" data-align-target="text-vertical" data-align-value="top" aria-label="Texto arriba" title="Texto arriba">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M7 5h10"></path>
+                                <path d="M12 5v14"></path>
+                                <path d="M8 9h8"></path>
+                              </svg>
+                            </button>
+                            <button class="icon-toggle" type="button" data-align-target="text-vertical" data-align-value="center" aria-label="Texto al medio" title="Texto al medio">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M7 12h10"></path>
+                                <path d="M12 5v14"></path>
+                                <path d="M8 16h8"></path>
+                                <path d="M8 8h8"></path>
+                              </svg>
+                            </button>
+                            <button class="icon-toggle" type="button" data-align-target="text-vertical" data-align-value="bottom" aria-label="Texto abajo" title="Texto abajo">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M7 19h10"></path>
+                                <path d="M12 5v14"></path>
+                                <path d="M8 15h8"></path>
+                              </svg>
+                            </button>
+                          </div>
+                        </span>
+                      </span>
+                    </div>
+                    <div id="info-marker-content-input"></div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <span>Alineacion de contenido</span>
+                  <div class="icon-toggle-group" id="info-marker-content-image-align" role="group" aria-label="Alineacion de imagen">
+                    <button class="icon-toggle" type="button" data-align-target="image" data-align-value="top" aria-label="Imagen arriba" title="Imagen arriba">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="6" y="4" width="12" height="5" rx="1"></rect>
+                        <path d="M4 13h16"></path>
+                        <path d="M4 18h10"></path>
+                      </svg>
+                    </button>
+                    <button class="icon-toggle" type="button" data-align-target="image" data-align-value="right" aria-label="Imagen a la derecha" title="Imagen a la derecha">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 7h9"></path>
+                        <path d="M4 12h9"></path>
+                        <path d="M4 17h9"></path>
+                        <rect x="16" y="6" width="4" height="12" rx="1"></rect>
+                      </svg>
+                    </button>
+                    <button class="icon-toggle" type="button" data-align-target="image" data-align-value="bottom" aria-label="Imagen abajo" title="Imagen abajo">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 6h16"></path>
+                        <path d="M4 11h10"></path>
+                        <rect x="6" y="15" width="12" height="5" rx="1"></rect>
+                      </svg>
+                    </button>
+                    <button class="icon-toggle" type="button" data-align-target="image" data-align-value="left" aria-label="Imagen a la izquierda" title="Imagen a la izquierda">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="4" y="6" width="4" height="12" rx="1"></rect>
+                        <path d="M11 7h9"></path>
+                        <path d="M11 12h9"></path>
+                        <path d="M11 17h9"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="field-row info-marker-content-row">
+                  <label class="field field--compact">
+                    <span>Ancho de popup</span>
+                    <input id="info-marker-content-width" name="info-marker-content-width" type="number" min="220" max="520" step="10" />
+                  </label>
+                  <label class="field field--compact">
+                    <span>Espacio media</span>
+                    <input id="info-marker-content-media-split" name="info-marker-content-media-split" type="text" inputmode="decimal" value="0,38" />
+                  </label>
+                </div>
+
+                <label class="field info-marker-content-split-slider-field" hidden>
+                  <span>Deslizador de espacio media</span>
+                  <input id="info-marker-content-media-split-slider" name="info-marker-content-media-split-slider" type="range" min="0.1" max="0.9" step="0.01" value="0.38" aria-label="Espacio media" />
+                </label>
+              </div>
+            </div>
+
+            <div class="scene-config-overlay__actions">
+              <button class="scene-config-overlay__action" id="info-marker-content-cancel" type="button">Cancelar</button>
+              <button class="scene-config-overlay__action scene-config-overlay__action--primary" id="info-marker-content-save" type="button">Guardar</button>
+            </div>
+          </aside>
+
+          <aside class="scene-config-overlay viewer-config-overlay" id="link-marker-config-overlay" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Marcador link</p>
+                <h3 id="link-marker-config-title">Configuración</h3>
+              </div>
+              <button class="scene-action scene-action--danger scene-config-overlay__delete" id="link-marker-config-delete" type="button" aria-label="Borrar marcador link">&#128465;</button>
+            </div>
+
+            <label class="field">
+              <span>Nombre</span>
+              <input id="link-marker-config-name" name="link-marker-config-name" type="text" />
+            </label>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Yaw</span>
+                <input id="link-marker-config-yaw" name="link-marker-config-yaw" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>Pitch</span>
+                <input id="link-marker-config-pitch" name="link-marker-config-pitch" type="number" step="0.1" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Escena destino</span>
+              <select id="link-marker-config-target-scene" name="link-marker-config-target-scene"></select>
+            </label>
+
+            <div class="field-row field-row--double">
+              <label class="field field--compact">
+                <span>Transíción</span>
+                <select id="link-marker-config-transition" name="link-marker-config-transition">
+                  <option value="fade">Fade</option>
+                  <option value="instant">Instant</option>
+                </select>
+              </label>
+              <label class="field field--compact">
+                <span>Duración (ms)</span>
+                <input id="link-marker-config-transition-duration" name="link-marker-config-transition-duration" type="number" min="100" max="10000" step="50" />
+              </label>
+            </div>
+
+            <label class="field field--checkbox">
+              <span>
+                <input id="link-marker-config-center-before-transition" name="link-marker-config-center-before-transition" type="checkbox" />
+                Centrar
+              </span>
+            </label>
+
+            <div class="viewer-config-overlay__placeholder" id="link-marker-config-alignment-hint">
+              Ajusta una vista inicial específica para esta transición.
+            </div>
+
+            <div class="scene-config-overlay__actions">
+              <button class="scene-config-overlay__action" id="link-marker-config-align-view" type="button">Definir vista inicial</button>
+              <button class="scene-config-overlay__action" id="link-marker-config-test" type="button">Ir</button>
+            </div>
+          </aside>
+          <aside class="scene-config-overlay viewer-config-overlay" id="light-marker-config-overlay" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Efecto light</p>
+                <h3 id="light-marker-config-title">Configuración</h3>
+              </div>
+              <button class="scene-action scene-action--danger scene-config-overlay__delete" id="light-marker-config-delete" type="button" aria-label="Borrar efecto light">&#128465;</button>
+            </div>
+
+            <label class="field">
+              <span>Nombre</span>
+              <input id="light-marker-config-name" name="light-marker-config-name" type="text" />
+            </label>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Yaw</span>
+                <input id="light-marker-config-yaw" name="light-marker-config-yaw" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>Pitch</span>
+                <input id="light-marker-config-pitch" name="light-marker-config-pitch" type="number" step="0.1" />
+              </label>
+            </div>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Color</span>
+                <input id="light-marker-config-color" name="light-marker-config-color" type="color" />
+              </label>
+              <label class="field">
+                <span>Radio</span>
+                <input id="light-marker-config-radius" name="light-marker-config-radius" type="number" min="20" max="320" step="1" />
+              </label>
+            </div>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Brillo</span>
+                <input id="light-marker-config-intensity" name="light-marker-config-intensity" type="range" min="0" max="1" step="0.05" />
+              </label>
+              <label class="field">
+                <span>Reflejo</span>
+                <input id="light-marker-config-ghost-intensity" name="light-marker-config-ghost-intensity" type="range" min="0" max="1" step="0.05" />
+              </label>
+            </div>
+
+            <div class="viewer-config-overlay__placeholder">
+              En la pestaña Efectos puedes arrastrar el marcador central para reposicionar la luz. Fuera de esa pestaña solo se ve el flare.
+            </div>
+          </aside>
+          <aside class="scene-config-overlay viewer-config-overlay" id="sound-marker-config-overlay" hidden>
+            <div class="scene-config-overlay__header">
+              <div>
+                <p class="scene-config-overlay__eyebrow">Efecto sound</p>
+                <h3 id="sound-marker-config-title">Configuración</h3>
+              </div>
+              <button class="scene-action scene-action--danger scene-config-overlay__delete" id="sound-marker-config-delete" type="button" aria-label="Borrar efecto sound">&#128465;</button>
+            </div>
+
+            <label class="field">
+              <span>Nombre</span>
+              <input id="sound-marker-config-name" name="sound-marker-config-name" type="text" />
+            </label>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Yaw</span>
+                <input id="sound-marker-config-yaw" name="sound-marker-config-yaw" type="number" step="0.1" />
+              </label>
+              <label class="field">
+                <span>Pitch</span>
+                <input id="sound-marker-config-pitch" name="sound-marker-config-pitch" type="number" step="0.1" />
+              </label>
+            </div>
+
+            <div class="placeholder-card ambient-audio-card ambient-audio-card--scene">
+              <strong>Archivo de sonido</strong>
+              <p id="sound-marker-config-audio-summary">No hay audio cargado para este punto sonoro.</p>
+              <div class="scene-config-overlay__actions scene-config-overlay__actions--start">
+                <button class="scene-config-overlay__action scene-config-overlay__action--primary-ghost" id="sound-marker-config-select" type="button">Seleccionar audio</button>
+                <button class="scene-config-overlay__action" id="sound-marker-config-clear" type="button">Quitar</button>
+              </div>
+            </div>
+
+            <div class="field-row field-row--double">
+              <label class="field">
+                <span>Volumen base</span>
+                <input id="sound-marker-config-volume" name="sound-marker-config-volume" type="range" min="0" max="100" step="1" />
+              </label>
+              <label class="field">
+                <span>Paneo estéreo</span>
+                <input id="sound-marker-config-pan" name="sound-marker-config-pan" type="range" min="0" max="100" step="1" />
+              </label>
+            </div>
+
+            <div class="field-row field-row--double field-row--sound-meta">
+              <label class="field">
+                <span>Apertura</span>
+                <input id="sound-marker-config-focus" name="sound-marker-config-focus" type="range" min="20" max="180" step="1" />
+              </label>
+              <label class="field field--checkbox">
+                <span>
+                  <input id="sound-marker-config-loop" name="sound-marker-config-loop" type="checkbox" />
+                  Repetir
+                </span>
+              </label>
+            </div>
+
+            <div class="viewer-config-overlay__placeholder">
+              El sonido se escucha más fuerte cuando apuntas hacia este marcador y se desplaza en estéreo según quede a la izquierda o a la derecha de la vista.
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="inspector-grid">
+        <article class="inspector-card inspector-card--status" id="project-summary-card">
+          <p class="inspector-card__eyebrow">Estado del tour</p>
+          <p class="inspector-card__timeline" id="project-summary-audio-timeline">Línea temporal global: sin clip activo.</p>
+          <h3 id="project-summary-name">Proyecto sin nombre</h3>
+          <p id="project-summary-copy">Define el nombre del proyecto y agrega escenas para construir el tour.</p>
+        </article>
+      </section>
+    </main>
+
+    <button class="scene-action editor-fullscreen-toggle" id="editor-fullscreen-toggle" type="button" aria-label="Pantalla completa del editor" title="Pantalla completa">&#x26F6;</button>
+    <button class="scene-action viewer-settings-toggle" id="viewer-settings-toggle" type="button" aria-label="Ajustes del visor" aria-expanded="false">&#9881;</button>
+    <aside class="viewer-settings-panel" id="viewer-settings-panel" hidden>
+      <div class="viewer-settings-panel__header">
+        <div>
+          <p class="scene-config-overlay__eyebrow">Ajustes</p>
+          <h3>Visor</h3>
+        </div>
+      </div>
+      <label class="field field--compact">
+        <span>Volumen general</span>
+        <input id="viewer-settings-volume" name="viewer-settings-volume" type="range" min="0" max="100" step="1" />
+      </label>
+      <label class="field field--checkbox">
+        <span>
+          <input id="viewer-settings-mute" name="viewer-settings-mute" type="checkbox" />
+          Silenciar audio
+        </span>
+      </label>
+      <label class="field field--checkbox">
+        <span>
+          <input id="viewer-settings-auto-expand-map" name="viewer-settings-auto-expand-map" type="checkbox" />
+          Expandir visor al colocar desde mapa
+        </span>
+      </label>
+      <label class="field field--checkbox">
+        <span>
+          <input id="viewer-settings-safe-delete" name="viewer-settings-safe-delete" type="checkbox" />
+          Borrado seguro
+        </span>
+      </label>
+      <p class="viewer-settings-panel__hint" id="viewer-settings-audio-status">Sin audio ambiente activo.</p>
+    </aside>
+  </div>
+
+  <input id="scene-file-input" type="file" accept="image/jpeg,image/png,image/tiff,.jpg,.jpeg,.png,.tif,.tiff" multiple hidden />
+  <input id="project-file-input" type="file" accept="application/json,application/zip,.json,.zip" hidden />
+  <input id="sound-marker-audio-input" type="file" accept="audio/mpeg,audio/mp4,audio/ogg,audio/wav,audio/x-wav,.mp3,.m4a,.ogg,.wav" hidden />
+  <input id="project-audio-input" type="file" accept=".mp3,audio/mpeg,audio/mp3" hidden />
+  <input id="scene-audio-input" type="file" accept=".mp3,audio/mpeg,audio/mp3" hidden />
+
+  <div class="tutorial-overlay" id="tutorial-overlay" hidden>
+    <div class="tutorial-overlay__backdrop"></div>
+    <div class="tutorial-overlay__spotlight" id="tutorial-spotlight" aria-hidden="true"></div>
+    <aside class="tutorial-overlay__card" id="tutorial-card" role="dialog" aria-modal="true" aria-labelledby="tutorial-title" aria-describedby="tutorial-text">
+      <p class="tutorial-overlay__eyebrow">Tutorial guiado</p>
+      <div class="tutorial-overlay__meta">
+        <h3 id="tutorial-title">Cómo comenzar</h3>
+        <span class="tutorial-overlay__step" id="tutorial-step">1 / 1</span>
+      </div>
+      <p class="tutorial-overlay__text" id="tutorial-text">Haz click para comenzar el recorrido guiado.</p>
+      <div class="tutorial-overlay__actions">
+        <button class="scene-config-overlay__action" id="tutorial-close" type="button">Salir</button>
+        <button class="primary-action tutorial-overlay__next" id="tutorial-next" type="button">Siguiente</button>
+      </div>
+      <p class="tutorial-overlay__hint">Usa el boton Siguiente o la tecla Enter para continuar.</p>
+    </aside>
+  </div>
+
+  <div class="confirm-modal" id="confirm-modal" hidden>
+    <div class="confirm-modal__backdrop" id="confirm-modal-backdrop"></div>
+    <div class="confirm-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title" aria-describedby="confirm-modal-message">
+      <p class="confirm-modal__eyebrow">Confirmacion</p>
+      <h3 id="confirm-modal-title">Confirmar accion</h3>
+      <p id="confirm-modal-message">Esta accion no se puede deshacer.</p>
+      <div class="confirm-modal__actions">
+        <button class="scene-config-overlay__action" id="confirm-modal-cancel" type="button">Cancelar</button>
+        <button class="scene-action scene-action--danger confirm-modal__confirm" id="confirm-modal-confirm" type="button">Borrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+  <script src="./lib/marzipano.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
