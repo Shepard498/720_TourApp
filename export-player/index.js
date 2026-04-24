@@ -172,10 +172,10 @@
     if (getInfoMarkerMediaKind(marker)) {
       var mediaLabel = getInfoMarkerMediaFileName(marker);
       return mediaLabel
-        ? 'El contenido "' + mediaLabel + '" no esta disponible en esta sesion.'
-        : 'El contenido multimedia no esta disponible en esta sesion.';
+        ? t('missingNamedMedia', { name: mediaLabel })
+        : t('missingMedia');
     }
-    return 'Todavia no hay contenido.';
+    return t('noContent');
   }
 
   function getInfoMarkerPopupWidth(marker) {
@@ -240,7 +240,7 @@
         var image = document.createElement('img');
         image.className = 'info-marker-rich__media info-marker-rich__media--image';
         image.src = mediaSrc;
-        image.alt = marker.name || 'Contenido del marcador';
+        image.alt = marker.name || t('markerContentAlt');
         mediaElement = image;
       }
       wrapper.appendChild(mediaElement);
@@ -359,6 +359,57 @@
   }
 
   var data = window.APP_DATA || { scenes: [], markers: [] };
+  var PLAYER_I18N = {
+    es: {
+      scenes: 'Escenas',
+      settings: 'Ajustes',
+      viewer: 'Visor',
+      generalVolume: 'Volumen general',
+      muteAudio: 'Silenciar audio',
+      close: 'Cerrar',
+      closeSceneList: 'Cerrar lista de escenas',
+      sceneList: 'Lista de escenas',
+      scenePrompt: 'Selecciona una escena del tour.',
+      fullscreen: 'Pantalla completa',
+      exitFullscreen: 'Salir de pantalla completa',
+      noAmbientAudio: 'Sin audio ambiente activo.',
+      activeProjectSceneAudio: 'Audio activo: proyecto + escena | base {projectVolume}% + {sceneVolume}%',
+      activeAudio: 'Audio activo: {scope} | volumen base {volume}%',
+      scopeScene: 'escena',
+      scopeProject: 'proyecto',
+      noScenes: 'Sin escenas',
+      missingNamedMedia: 'El contenido "{name}" no esta disponible en esta sesion.',
+      missingMedia: 'El contenido multimedia no esta disponible en esta sesion.',
+      noContent: 'Todavia no hay contenido.',
+      markerContentAlt: 'Contenido del marcador',
+      hotspot: 'Hotspot'
+    },
+    en: {
+      scenes: 'Scenes',
+      settings: 'Settings',
+      viewer: 'Viewer',
+      generalVolume: 'General volume',
+      muteAudio: 'Mute audio',
+      close: 'Close',
+      closeSceneList: 'Close scene list',
+      sceneList: 'Scene list',
+      scenePrompt: 'Select a tour scene.',
+      fullscreen: 'Fullscreen',
+      exitFullscreen: 'Exit fullscreen',
+      noAmbientAudio: 'No ambient audio active.',
+      activeProjectSceneAudio: 'Active audio: project + scene | base {projectVolume}% + {sceneVolume}%',
+      activeAudio: 'Active audio: {scope} | base volume {volume}%',
+      scopeScene: 'scene',
+      scopeProject: 'project',
+      noScenes: 'No scenes',
+      missingNamedMedia: 'The content "{name}" is not available in this session.',
+      missingMedia: 'The media content is not available in this session.',
+      noContent: 'No content yet.',
+      markerContentAlt: 'Marker content',
+      hotspot: 'Hotspot'
+    }
+  };
+  var playerLanguage = normalizePlayerLanguage(data.language);
   var viewerRoot = document.querySelector('.viewer');
   var viewerStageElement = document.getElementById('viewerStage');
   var panoElement = document.getElementById('pano');
@@ -404,6 +455,60 @@
   var soundMarkerSceneTransition = null;
   var soundMarkerFreezeSceneId = null;
   var soundMarkerAudioUnlockBound = false;
+
+  function normalizePlayerLanguage(value) {
+    return value === 'en' ? 'en' : 'es';
+  }
+
+  function t(key, vars) {
+    var template = (PLAYER_I18N[playerLanguage] && PLAYER_I18N[playerLanguage][key]) || PLAYER_I18N.es[key] || key;
+    var replacements = vars || {};
+    return String(template).replace(/\{(\w+)\}/g, function(match, name) {
+      return Object.prototype.hasOwnProperty.call(replacements, name) ? String(replacements[name]) : match;
+    });
+  }
+
+  function setText(selector, key) {
+    var element = document.querySelector(selector);
+    if (element) { element.textContent = t(key); }
+  }
+
+  function setInputText(input, key) {
+    var wrapper = input && input.parentElement;
+    if (!wrapper) { return; }
+    var textNode = Array.from(wrapper.childNodes).find(function(node) {
+      return node.nodeType === Node.TEXT_NODE && node.textContent.trim();
+    });
+    if (!textNode) {
+      textNode = document.createTextNode('');
+      wrapper.appendChild(textNode);
+    }
+    textNode.textContent = ' ' + t(key);
+  }
+
+  function applyStaticTranslations() {
+    document.documentElement.lang = playerLanguage;
+    if (sceneToggleElement) { sceneToggleElement.textContent = t('scenes'); }
+    if (viewerSettingsToggleElement) { viewerSettingsToggleElement.setAttribute('aria-label', t('settings')); }
+    if (sceneBackdropElement) { sceneBackdropElement.setAttribute('aria-label', t('closeSceneList')); }
+    var sceneSidebar = document.getElementById('sceneSidebar');
+    if (sceneSidebar) { sceneSidebar.setAttribute('aria-label', t('sceneList')); }
+    if (sceneCloseElement) {
+      sceneCloseElement.textContent = t('close');
+      sceneCloseElement.setAttribute('aria-label', t('close'));
+    }
+    setText('.viewer-settings__eyebrow', 'settings');
+    setText('.viewer-settings h3', 'viewer');
+    setText('label[for="viewerSettingsVolume"] span', 'generalVolume');
+    var volumeLabel = viewerSettingsVolumeElement && viewerSettingsVolumeElement.closest('label');
+    var volumeSpan = volumeLabel && volumeLabel.querySelector('span');
+    if (volumeSpan) { volumeSpan.textContent = t('generalVolume'); }
+    setInputText(viewerSettingsMuteElement, 'muteAudio');
+    var sidebarPrompt = document.querySelector('.sidebar__header p');
+    if (sidebarPrompt) { sidebarPrompt.textContent = t('scenePrompt'); }
+  }
+
+  applyStaticTranslations();
 
   function clearInfoMarkerPlacementShift() {
     if (infoDisplayPlacementShiftTimer) {
@@ -637,8 +742,8 @@
     fullscreenToggleElement.hidden = false;
     fullscreenToggleElement.innerHTML = '&#9974;';
     fullscreenToggleElement.setAttribute('aria-pressed', active ? 'true' : 'false');
-    fullscreenToggleElement.setAttribute('aria-label', active ? 'Salir de pantalla completa' : 'Pantalla completa');
-    fullscreenToggleElement.title = active ? 'Salir de pantalla completa' : 'Pantalla completa';
+    fullscreenToggleElement.setAttribute('aria-label', active ? t('exitFullscreen') : t('fullscreen'));
+    fullscreenToggleElement.title = active ? t('exitFullscreen') : t('fullscreen');
   }
 
   function toggleFullscreen() {
@@ -1068,12 +1173,18 @@ function fadeOutAmbientAudio() {
       var projectAudio = getProjectAmbientAudioConfig();
       var sceneAudio = getSceneAmbientAudioConfig();
       if (isProjectAmbientAudioBackgroundEnabled() && projectAudio && sceneAudio) {
-        viewerSettingsStatusElement.textContent = 'Audio activo: proyecto + escena | base ' + Math.round(projectAudio.volume * 100) + '% + ' + Math.round(sceneAudio.volume * 100) + '%';
+        viewerSettingsStatusElement.textContent = t('activeProjectSceneAudio', {
+          projectVolume: Math.round(projectAudio.volume * 100),
+          sceneVolume: Math.round(sceneAudio.volume * 100)
+        });
       } else {
         var effective = getEffectiveAmbientAudio();
         viewerSettingsStatusElement.textContent = effective
-          ? 'Audio activo: ' + (effective.scope === 'scene' ? 'escena' : 'proyecto') + ' | volumen base ' + Math.round(effective.config.volume * 100) + '%'
-          : 'Sin audio ambiente activo.';
+          ? t('activeAudio', {
+            scope: effective.scope === 'scene' ? t('scopeScene') : t('scopeProject'),
+            volume: Math.round(effective.config.volume * 100)
+          })
+          : t('noAmbientAudio');
       }
     }
   }
@@ -1648,8 +1759,8 @@ function toggleViewerSettings(forceOpen) {
     markerElement.className = 'viewer-marker';
     markerElement.dataset.markerId = marker.id;
     markerElement.dataset.markerType = normalizeMarkerType(marker.type);
-    markerElement.setAttribute('aria-label', marker.name || 'Hotspot');
-    markerElement.title = marker.name || 'Hotspot';
+    markerElement.setAttribute('aria-label', marker.name || t('hotspot'));
+    markerElement.title = marker.name || t('hotspot');
     markerElement.innerHTML = '<span class="viewer-marker__icon">' + getMarkerTypeBadge(marker.type) + '</span>';
 
     markerElement.addEventListener('click', function(event) {
@@ -1707,8 +1818,8 @@ function toggleViewerSettings(forceOpen) {
     }
 
     hotspotEntry.element.dataset.markerType = normalizeMarkerType(marker.type);
-    hotspotEntry.element.setAttribute('aria-label', marker.name || 'Hotspot');
-    hotspotEntry.element.title = marker.name || 'Hotspot';
+    hotspotEntry.element.setAttribute('aria-label', marker.name || t('hotspot'));
+    hotspotEntry.element.title = marker.name || t('hotspot');
     hotspotEntry.element.innerHTML = '<span class="viewer-marker__icon">' + getMarkerTypeBadge(marker.type) + '</span>';
     if (hotspotEntry.hotspot && typeof hotspotEntry.hotspot.setPosition === 'function') {
       hotspotEntry.hotspot.setPosition({ yaw: marker.yaw, pitch: marker.pitch });
@@ -1962,7 +2073,7 @@ function toggleViewerSettings(forceOpen) {
     renderSceneList(initialScene.data.id);
     switchScene(initialScene, 'fade');
   } else {
-    sceneTitleElement.textContent = 'Sin escenas';
+    sceneTitleElement.textContent = t('noScenes');
   }
 })();
 

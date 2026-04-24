@@ -18,6 +18,7 @@
         <p class="mobile-drawer-header__label">Secciones</p>
       </div>
       <div class="hub__brand">
+        <button class="language-toggle" id="language-toggle" type="button" aria-label="Cambiar idioma a inglés" title="Cambiar idioma">EN</button>
         <h1>Tour Builder</h1>
         <p class="hub__subtitle">Editor base.</p>
       </div>
@@ -295,6 +296,7 @@
             <div id="alignment-pano" class="viewer-stage__pano viewer-stage__pano--alignment" hidden></div>
             <div id="light-overlay" class="viewer-stage__lights" hidden aria-hidden="true"></div>
             <div id="marker-overlay" class="viewer-stage__markers" hidden aria-label="Marcadores en escena"></div>
+            <button class="scene-action viewer-link-align-save" id="viewer-link-align-save" type="button" aria-label="Guardar vista inicial" hidden>&#10003;</button>
             <aside id="info-marker-display" class="info-marker-display" hidden>
               <div id="info-marker-display-body"></div>
             </aside>
@@ -373,7 +375,7 @@
               <input id="info-marker-config-name" name="info-marker-config-name" type="text" />
             </label>
 
-            <div class="field-row field-row--double">
+            <div class="field-row field-row--double field-row--coordinates">
               <label class="field">
                 <span>Yaw</span>
                 <input id="info-marker-config-yaw" name="info-marker-config-yaw" type="number" step="0.1" />
@@ -553,8 +555,8 @@
                 </div>
 
                 <label class="field info-marker-content-split-slider-field" hidden>
-                  <span>Deslizador de espacio media</span>
-                  <input id="info-marker-content-media-split-slider" name="info-marker-content-media-split-slider" type="range" min="0.1" max="0.9" step="0.01" value="0.38" aria-label="Espacio media" />
+                  <span>Ancho de popup</span>
+                  <input id="info-marker-content-media-split-slider" name="info-marker-content-media-split-slider" type="range" min="220" max="520" step="10" value="320" aria-label="Ancho de popup" />
                 </label>
               </div>
             </div>
@@ -579,7 +581,7 @@
               <input id="link-marker-config-name" name="link-marker-config-name" type="text" />
             </label>
 
-            <div class="field-row field-row--double">
+            <div class="field-row field-row--double field-row--coordinates">
               <label class="field">
                 <span>Yaw</span>
                 <input id="link-marker-config-yaw" name="link-marker-config-yaw" type="number" step="0.1" />
@@ -639,7 +641,7 @@
               <input id="light-marker-config-name" name="light-marker-config-name" type="text" />
             </label>
 
-            <div class="field-row field-row--double">
+            <div class="field-row field-row--double field-row--coordinates">
               <label class="field">
                 <span>Yaw</span>
                 <input id="light-marker-config-yaw" name="light-marker-config-yaw" type="number" step="0.1" />
@@ -690,7 +692,7 @@
               <input id="sound-marker-config-name" name="sound-marker-config-name" type="text" />
             </label>
 
-            <div class="field-row field-row--double">
+            <div class="field-row field-row--double field-row--coordinates">
               <label class="field">
                 <span>Yaw</span>
                 <input id="sound-marker-config-yaw" name="sound-marker-config-yaw" type="number" step="0.1" />
@@ -828,9 +830,5 @@
   <script src="./app.js"></script>
 </body>
 </html>
-
-
-
-
 
 
