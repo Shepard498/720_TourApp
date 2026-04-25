@@ -180,9 +180,9 @@ const EDITOR_I18N = {
     'status.importingExtra': ' | +{count} mas',
     'status.linkSource': 'Creación de hotspot link: selecciona primero la escena origen.',
     'status.linkTarget': 'Creación de hotspot link: ahora selecciona la escena destino.',
-    'status.linkPlacement': 'Creación de hotspot link: panea el visor si hace falta y usa el tercer click para ubicar el hotspot.',
-    'status.linkThirdClick': 'Creación de hotspot link: usa el tercer click en el visor para ubicar el hotspot.',
-    'status.linkDifferentTarget': 'Creación de hotspot link: selecciona una segunda escena distinta como destino.',
+    'status.linkPlacement': 'Creación de hotspot link: ubica el hotspot clickeando dentro del visor.',
+    'status.linkThirdClick': 'Creación de hotspot link: ubica el hotspot clickeando dentro del visor.',
+    'status.linkDifferentTarget': 'Creación de hotspot link: selecciona una distinta como destino.',
     'status.placement': 'Creación de {type}: panea el visor y haz click para ubicarlo. También puedes elegir otra escena desde el mapa.',
     'status.placementLight': 'efecto light',
     'status.placementSound': 'efecto sound',
@@ -1138,6 +1138,7 @@ const runtime = {
   tutorialDemo: null,
   infoMarkerContentOverlayResizeObserver: null,
   infoMarkerContentOverlayPositionFrame: 0,
+  linkAlignmentSaveButtonPositionFrame: 0,
   mapPanelResize: null,
   mapPanelPreferredWidth: null,
   nodeMapRenderOffsetX: 0,
@@ -1411,6 +1412,17 @@ function scheduleInfoMarkerContentOverlayPosition() {
   runtime.infoMarkerContentOverlayPositionFrame = window.requestAnimationFrame(() => {
     runtime.infoMarkerContentOverlayPositionFrame = 0;
     positionInfoMarkerContentOverlay();
+  });
+}
+
+function scheduleLinkAlignmentSaveButtonPosition() {
+  if (runtime.linkAlignmentSaveButtonPositionFrame) {
+    return;
+  }
+
+  runtime.linkAlignmentSaveButtonPositionFrame = window.requestAnimationFrame(() => {
+    runtime.linkAlignmentSaveButtonPositionFrame = 0;
+    positionLinkAlignmentViewerSaveButton();
   });
 }
 
@@ -3251,12 +3263,14 @@ function syncMapPanelWidthToLayout() {
   const effectiveWidth = getEffectiveMapPanelWidth();
   if (Number.isFinite(effectiveWidth)) {
     applyMapPanelWidth(effectiveWidth, shouldAutoExpandMapViewer() ? { minWidth: 240 } : {});
+    scheduleLinkAlignmentSaveButtonPosition();
     return;
   }
 
   const explicitWidth = parseFloat(elements.appShell.style.getPropertyValue('--map-panel-width'));
   if (Number.isFinite(explicitWidth)) {
     applyMapPanelWidth(explicitWidth);
+    scheduleLinkAlignmentSaveButtonPosition();
   }
 }
 
@@ -3301,6 +3315,7 @@ function handleMapPanelResizePointerDown(event) {
     const rawWidth = clientX - metrics.sidePanelLeft - metrics.columnGap - (metrics.splitterWidth / 2);
     runtime.mapPanelPreferredWidth = clampMapPanelWidth(rawWidth);
     syncMapPanelWidthToLayout();
+    scheduleLinkAlignmentSaveButtonPosition();
   };
 
   updateWidth(event.clientX);
@@ -3435,12 +3450,22 @@ function positionBottomLeftViewerOverlay(overlay, options = {}) {
     return;
   }
 
+  let bottomBoundary = visibleFrameRect.bottom;
+  const avoidBottomElement = options.avoidBottomElement || null;
+  if (avoidBottomElement && !avoidBottomElement.hidden) {
+    const avoidRect = avoidBottomElement.getBoundingClientRect();
+    const overlapsViewerHorizontally = avoidRect.right > visibleFrameRect.left && avoidRect.left < visibleFrameRect.right;
+    const overlapsViewerVertically = avoidRect.bottom > visibleFrameRect.top && avoidRect.top < visibleFrameRect.bottom;
+    if (avoidRect.width > 0 && avoidRect.height > 0 && overlapsViewerHorizontally && overlapsViewerVertically) {
+      const avoidBottomGap = options.avoidBottomGap ?? 10;
+      bottomBoundary = Math.min(bottomBoundary, avoidRect.top - avoidBottomGap);
+    }
+  }
+
   const left = visibleFrameRect.left + inset;
-  const top = clamp(
-    visibleFrameRect.bottom - inset - overlayHeight,
-    visibleFrameRect.top + inset,
-    visibleFrameRect.bottom - overlayHeight - inset
-  );
+  const minTop = visibleFrameRect.top + inset;
+  const maxTop = Math.max(minTop, bottomBoundary - overlayHeight - inset);
+  const top = clamp(visibleFrameRect.bottom - inset - overlayHeight, minTop, maxTop);
 
   overlay.style.position = 'fixed';
   overlay.style.left = `${left}px`;
@@ -3510,7 +3535,10 @@ function positionSoundMarkerConfigOverlay() {
 }
 
 function positionLinkAlignmentViewerSaveButton() {
-  positionBottomLeftViewerOverlay(elements.viewerLinkAlignSave);
+  positionBottomLeftViewerOverlay(elements.viewerLinkAlignSave, {
+    avoidBottomElement: isCompactLayout() ? elements.projectSummaryCard : null,
+    avoidBottomGap: 10
+  });
 }
 
 function updateMobileViewerMetaLayout() {
@@ -13010,6 +13038,7 @@ function renderStatus() {
     setStatusText(t('status.linkAlignView', {
       saveAction: t('link.alignSave')
     }));
+    positionLinkAlignmentViewerSaveButton();
     return;
   }
 

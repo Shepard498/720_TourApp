@@ -1397,6 +1397,11 @@ button {
   gap: 10px;
 }
 
+.field-row--scene-view {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .field-row--double {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1404,6 +1409,16 @@ button {
 }
 
 .field-row--coordinates {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.field-row--light-controls {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.field-row--link-transition {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
@@ -2255,6 +2270,19 @@ button {
   transform: none;
 }
 
+.viewer-link-align-save:not([hidden]) {
+  border-color: rgba(100, 245, 193, 0.82);
+  background:
+    radial-gradient(circle at top, rgba(100, 245, 193, 0.3), transparent 62%),
+    rgba(100, 245, 193, 0.16);
+  color: rgba(236, 255, 248, 0.98);
+  box-shadow:
+    0 0 0 1px rgba(100, 245, 193, 0.28),
+    0 0 18px rgba(100, 245, 193, 0.28),
+    0 10px 22px rgba(0, 0, 0, 0.24);
+  animation: node-map-tool-active-pulse 1.1s ease-in-out infinite;
+}
+
 .viewer-settings-toggle {
   right: max(env(safe-area-inset-right), var(--shell-pad));
 }
@@ -2455,6 +2483,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .viewer-link-align-save:not([hidden]),
   .inspector-card--status.is-sheening::after {
     animation: none;
   }
@@ -4937,6 +4966,21 @@ body {
 
   .field-row--coordinates {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .field-row--light-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .field-row--link-transition {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .field-row--scene-view {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
   }
 
