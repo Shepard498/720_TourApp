@@ -1246,10 +1246,11 @@ button {
 }
 
 .quill-shell {
+  position: relative;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .quill-shell .ql-toolbar.ql-snow {
@@ -1276,6 +1277,11 @@ button {
   fill: rgba(236, 245, 255, 0.92);
 }
 
+.quill-shell .ql-toolbar.ql-snow .ql-even,
+.quill-shell .ql-toolbar.ql-snow .ql-stroke.ql-fill {
+  fill: rgba(236, 245, 255, 0.92);
+}
+
 .quill-shell .ql-toolbar.ql-snow .ql-picker {
   color: rgba(236, 245, 255, 0.92);
 }
@@ -1292,6 +1298,29 @@ button {
 .quill-shell .ql-toolbar.ql-snow .ql-picker-label:hover .ql-stroke,
 .quill-shell .ql-toolbar.ql-snow .ql-picker-label.ql-active .ql-stroke {
   stroke: #d7fffb;
+}
+
+.quill-shell .ql-tooltip {
+  z-index: 80;
+  border: 1px solid rgba(100, 245, 193, 0.24);
+  border-radius: 10px;
+  background: rgba(8, 12, 18, 0.96);
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+.quill-shell .ql-tooltip.ql-hidden {
+  display: none;
+}
+
+.quill-shell .ql-tooltip input[type="text"] {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.quill-shell .ql-tooltip a {
+  color: var(--accent);
 }
 
 .info-marker-content-toolbar-tools {
@@ -1335,10 +1364,12 @@ button {
 }
 
 .quill-shell .ql-container.ql-snow {
+  position: relative;
   border: 0;
   font: inherit;
   color: var(--text);
   background: rgba(255, 255, 255, 0.02);
+  overflow: visible;
 }
 
 .quill-shell .ql-editor {
@@ -1650,6 +1681,81 @@ button {
   cursor: default;
 }
 
+.preview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 82;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 2vw, 24px);
+}
+
+.preview-modal[hidden] {
+  display: none !important;
+}
+
+.preview-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(3, 6, 10, 0.74);
+  backdrop-filter: blur(10px);
+}
+
+.preview-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(1240px, calc(100vw - 24px));
+  height: min(760px, calc(100vh - 24px));
+  height: min(760px, calc(100dvh - 24px));
+  min-height: 360px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(100, 245, 193, 0.24);
+  background: linear-gradient(180deg, rgba(15, 21, 30, 0.98), rgba(8, 12, 18, 0.98));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.preview-modal__header {
+  min-width: 0;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.preview-modal__eyebrow {
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.68rem;
+  color: rgba(100, 245, 193, 0.86);
+}
+
+.preview-modal__header h3 {
+  margin: 0;
+}
+
+.preview-modal__close {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  flex: 0 0 auto;
+  font-size: 1.3rem;
+}
+
+.preview-modal__frame {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  background: #05070b;
+}
+
 .confirm-modal {
   position: fixed;
   inset: 0;
@@ -1913,6 +2019,18 @@ button {
 .info-marker-rich__text ul,
 .info-marker-rich__text ol {
   padding-left: 1.2em;
+}
+
+.info-marker-rich__text a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.info-marker-rich__text a:hover,
+.info-marker-rich__text a:focus-visible {
+  color: #d7fffb;
 }
 
 .info-marker-rich__text[data-text-align="left"] {

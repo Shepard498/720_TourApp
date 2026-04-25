@@ -191,12 +191,14 @@ const EDITOR_I18N = {
     'export.packagingProject': 'Empaquetando proyecto...',
     'export.packagingItem': 'Empaquetando {name}...',
     'export.packagingStandalone': 'Empaquetando player standalone...',
+    'export.previewStandalone': 'Armando preview del player...',
     'export.packagingTiles': 'Empaquetando tiles {done}/{total}...',
     'export.generatingZip': 'Generando zip standalone...',
     'alert.saveProjectFailed': 'No se pudo guardar el paquete del proyecto.',
     'alert.noReadyScenes': 'Todavia no hay escenas multires listas para exportar.',
     'alert.exportSkippedScenes': 'Se exportaron {ready} escena(s) listas. {skipped} escena(s) pendientes quedaron afuera.',
     'alert.exportFailed': 'No se pudo generar el player standalone.',
+    'alert.previewFailed': 'No se pudo abrir el preview del player standalone.',
     'alert.tutorialScenesFailed': 'No se pudo iniciar el tutorial de escenas.',
     'alert.tutorialMarkersFailed': 'No se pudo iniciar el tutorial de marcadores.',
     'alert.tutorialEffectsFailed': 'No se pudo iniciar el tutorial de efectos.',
@@ -238,7 +240,7 @@ const EDITOR_I18N = {
     'tutorial.title.importScenes': 'Importar escenas',
     'tutorial.title.markers': 'Añadir marcadores',
     'tutorial.title.effects': 'Añadir efectos',
-    'tutorial.title.saveLoad': 'Guardar/Importar/Exportar proyecto',
+    'tutorial.title.saveLoad': 'Guardar/Importar/Preview/Exportar proyecto',
     'tutorial.title.nodeMap': 'Editor rápido (Nodemap)'
   },
   en: {
@@ -287,6 +289,7 @@ const EDITOR_I18N = {
     'aria.textBold': 'Bold',
     'aria.textItalic': 'Italic',
     'aria.textUnderline': 'Underline',
+    'aria.textLink': 'Link',
     'aria.numberedList': 'Numbered list',
     'aria.bulletList': 'Bullet list',
     'aria.clearFormat': 'Clear formatting',
@@ -306,6 +309,7 @@ const EDITOR_I18N = {
     'aria.mediaSpace': 'Media space',
     'aria.editorFullscreen': 'Editor fullscreen',
     'aria.viewerSettings': 'Viewer settings',
+    'aria.closePreview': 'Close preview',
     'tab.instructions': 'Instructions',
     'tab.commands': 'Commands',
     'tab.project': 'Project',
@@ -326,8 +330,8 @@ const EDITOR_I18N = {
     'tutorial.markers.cardCopy': 'Learn how to create, position, and configure link and info hotspots on your scenes.',
     'tutorial.effects.cardTitle': 'Add effects',
     'tutorial.effects.cardCopy': 'Learn how to create light effects and adjust their appearance directly on the scene.',
-    'tutorial.save.cardTitle': 'Save/Import/Export project',
-    'tutorial.save.cardCopy': 'Learn how to save your work, import previous projects, and export the final tour.',
+    'tutorial.save.cardTitle': 'Save/Import/Preview/Export project',
+    'tutorial.save.cardCopy': 'Learn how to save your work, import previous projects, preview the player, and export the final tour.',
     'tutorial.nodeMap.cardTitle': 'Quick editor (Nodemap)',
     'tutorial.nodeMap.cardCopy': 'Learn how to use the nodemap to edit scenes, connections, and shortcuts visually.',
     'panel.commands.copy': 'General actions to save, recover, export, or clear the tour.',
@@ -335,6 +339,8 @@ const EDITOR_I18N = {
     'command.save.copy': 'Download a project package with the configuration and files needed to restore it.',
     'command.load.title': 'Import',
     'command.load.copy': 'Load a project package or an older JSON and restore the editor.',
+    'command.preview.title': 'Preview',
+    'command.preview.copy': 'Open the standalone player with the current state before exporting.',
     'command.export.title': 'Export',
     'command.export.copy': 'Prepare the standalone player and processed files.',
     'command.reset.title': 'Delete',
@@ -352,6 +358,9 @@ const EDITOR_I18N = {
     'audio.overlayBackground': 'Overlay background audio',
     'audio.selectMp3': 'Select MP3',
     'audio.remove': 'Remove',
+    'player.presentationTitle': 'Player presentation',
+    'player.presentationCopy': 'The player can open with the tour name over the first scene before starting.',
+    'player.showIntro': 'Show intro screen',
     'project.upcomingTitle': 'Coming soon',
     'project.upcomingCopy': 'Here we can add slug, cover image, global settings, and export parameters.',
     'panel.scenes.copy': 'Import panoramas and organize them as the tour list.',
@@ -414,6 +423,8 @@ const EDITOR_I18N = {
     'settings.muteAudio': 'Mute audio',
     'settings.autoExpandMap': 'Expand viewer when placing from map',
     'settings.safeDelete': 'Safe delete',
+    'preview.eyebrow': 'Preview',
+    'preview.title': 'Tour preview',
     'tutorial.eyebrow': 'Guided tutorial',
     'tutorial.defaultTitle': 'How to start',
     'tutorial.defaultText': 'Click to start the guided walkthrough.',
@@ -530,12 +541,14 @@ const EDITOR_I18N = {
     'export.packagingProject': 'Packaging project...',
     'export.packagingItem': 'Packaging {name}...',
     'export.packagingStandalone': 'Packaging standalone player...',
+    'export.previewStandalone': 'Building player preview...',
     'export.packagingTiles': 'Packaging tiles {done}/{total}...',
     'export.generatingZip': 'Generating standalone zip...',
     'alert.saveProjectFailed': 'Could not save the project package.',
     'alert.noReadyScenes': 'There are no multires scenes ready to export yet.',
     'alert.exportSkippedScenes': '{ready} ready scene(s) were exported. {skipped} pending scene(s) were left out.',
     'alert.exportFailed': 'Could not generate the standalone player.',
+    'alert.previewFailed': 'Could not open the standalone player preview.',
     'alert.tutorialScenesFailed': 'Could not start the scenes tutorial.',
     'alert.tutorialMarkersFailed': 'Could not start the markers tutorial.',
     'alert.tutorialEffectsFailed': 'Could not start the effects tutorial.',
@@ -577,7 +590,7 @@ const EDITOR_I18N = {
     'tutorial.title.importScenes': 'Import scenes',
     'tutorial.title.markers': 'Add markers',
     'tutorial.title.effects': 'Add effects',
-    'tutorial.title.saveLoad': 'Save/Import/Export project',
+    'tutorial.title.saveLoad': 'Save/Import/Preview/Export project',
     'tutorial.title.nodeMap': 'Quick editor (Nodemap)'
   }
 };
@@ -622,9 +635,10 @@ const RUNTIME_TEXT_EN = {
   'Desde aquí puedes gestionar archivos del proyecto sin afectar directamente la edición de escenas, hotspots o efectos.': 'From here you can manage project files without directly changing scenes, hotspots, or effects.',
   'El botón "Guardar" descarga un paquete del proyecto con la configuración y los archivos necesarios para retomarlo más adelante exactamente como estaba.': 'The "Save" button downloads a project package with the configuration and files needed to resume later exactly as it was.',
   'El botón "Importar" carga un paquete del proyecto o un JSON anterior y restaura el proyecto completo dentro del editor.': 'The "Import" button loads a project package or an older JSON and restores the full project inside the editor.',
+  'El botón "Preview" abre el player standalone dentro del editor con el estado actual del tour. Sirve para revisar la experiencia final antes de exportar.': 'The "Preview" button opens the standalone player inside the editor with the current tour state. Use it to review the final experience before exporting.',
   'El botón "Exportar" genera la salida final del tour con el player standalone y los archivos procesados necesarios para compartirlo o publicarlo.': 'The "Export" button generates the final tour output with the standalone player and processed files needed to share or publish it.',
   'El botón "Borrar" limpia el proyecto actual y deja el editor en blanco. Como es una acción delicada, la app pide confirmación antes de continuar.': 'The "Delete" button clears the current project and leaves the editor blank. Because it is a sensitive action, the app asks for confirmation before continuing.',
-  'Cuando quieras repasar cómo guardar, recuperar, exportar o reiniciar el proyecto, podrás volver a este tutorial desde la pestaña "Instrucciones" o desde el botón de ayuda de Comandos.': 'When you want to review saving, restoring, exporting, or resetting the project, you can return to this tutorial from the "Instructions" tab or the Commands help button.',
+  'Cuando quieras repasar cómo guardar, recuperar, previsualizar, exportar o reiniciar el proyecto, podrás volver a este tutorial desde la pestaña "Instrucciones" o desde el botón de ayuda de Comandos.': 'When you want to review saving, restoring, previewing, exporting, or resetting the project, you can return to this tutorial from the "Instructions" tab or the Commands help button.',
   'La pestaña "Mapa" ofrece una forma rápida de entender y editar la estructura del tour como un grafo visual.': 'The "Map" tab offers a quick way to understand and edit the tour structure as a visual graph.',
   'Desde aquí puedes ver escenas y conexiones sin perder de vista el visor, lo que lo vuelve muy útil para edición rápida.': 'From here you can see scenes and connections while keeping the viewer in sight, which makes it useful for fast editing.',
   'Estas acciones rápidas permiten importar escenas y crear links, media hotspots o efectos directamente desde el mapa.': 'These quick actions let you import scenes and create links, media hotspots, or effects directly from the map.',
@@ -671,7 +685,7 @@ const RUNTIME_TEXT_EN = {
   'Importar escenas': 'Import scenes',
   'Añadir marcadores': 'Add markers',
   'Añadir efectos': 'Add effects',
-  'Guardar/Importar/Exportar proyecto': 'Save/Import/Export project',
+  'Guardar/Importar/Preview/Exportar proyecto': 'Save/Import/Preview/Export project',
   'Editor rápido (Nodemap)': 'Quick editor (Nodemap)',
   'Activo': 'Active',
   'No se pudo generar el multires para esta imagen.': 'Could not generate multires assets for this image.'
@@ -710,6 +724,8 @@ const STATIC_TEXT_TRANSLATIONS = [
   ['#save-project span', 'command.save.copy'],
   ['#load-project strong', 'command.load.title'],
   ['#load-project span', 'command.load.copy'],
+  ['#preview-project strong', 'command.preview.title'],
+  ['#preview-project span', 'command.preview.copy'],
   ['#export-project strong', 'command.export.title'],
   ['#export-project span', 'command.export.copy'],
   ['#reset-project strong', 'command.reset.title'],
@@ -719,8 +735,10 @@ const STATIC_TEXT_TRANSLATIONS = [
   ['.ambient-audio-card:not(.ambient-audio-card--scene) > strong', 'audio.projectTitle'],
   ['#project-ambient-audio-select', 'audio.selectMp3'],
   ['#project-ambient-audio-clear', 'audio.remove'],
-  ['[data-panel="proyecto"] .placeholder-card:not(.ambient-audio-card) strong', 'project.upcomingTitle'],
-  ['[data-panel="proyecto"] .placeholder-card:not(.ambient-audio-card) p', 'project.upcomingCopy'],
+  ['.project-player-card > strong', 'player.presentationTitle'],
+  ['.project-player-card > p', 'player.presentationCopy'],
+  ['.project-upcoming-card strong', 'project.upcomingTitle'],
+  ['.project-upcoming-card p', 'project.upcomingCopy'],
   ['[data-panel="escenas"] h2', 'tab.scenes'],
   ['[data-panel="escenas"] .panel-view__header p', 'panel.scenes.copy'],
   ['#import-scenes', 'action.importScenes'],
@@ -759,6 +777,8 @@ const STATIC_TEXT_TRANSLATIONS = [
   ['.inspector-card__eyebrow', 'summary.eyebrow'],
   ['#viewer-settings-panel .scene-config-overlay__eyebrow', 'settings.title'],
   ['#viewer-settings-panel h3', 'settings.viewer'],
+  ['#preview-modal .preview-modal__eyebrow', 'preview.eyebrow'],
+  ['#preview-modal-title', 'preview.title'],
   ['#tutorial-overlay .tutorial-overlay__eyebrow', 'tutorial.eyebrow'],
   ['#tutorial-close', 'tutorial.close'],
   ['#tutorial-overlay .tutorial-overlay__hint', 'tutorial.hint'],
@@ -798,6 +818,7 @@ const STATIC_LABEL_TRANSLATIONS = [
 
 const STATIC_CHECKBOX_TRANSLATIONS = [
   ['project-ambient-audio-background', 'audio.overlayBackground'],
+  ['project-show-intro', 'player.showIntro'],
   ['scene-ambient-audio-sync-timeline', 'audio.syncProjectTime'],
   ['info-marker-config-preview-in-tab', 'label.showPopup'],
   ['link-marker-config-center-before-transition', 'label.center'],
@@ -856,6 +877,7 @@ const STATIC_ATTRIBUTE_TRANSLATIONS = [
   ['.ql-bold', 'aria-label', 'aria.textBold'],
   ['.ql-italic', 'aria-label', 'aria.textItalic'],
   ['.ql-underline', 'aria-label', 'aria.textUnderline'],
+  ['.ql-link', 'aria-label', 'aria.textLink'],
   ['.ql-list[value="ordered"]', 'aria-label', 'aria.numberedList'],
   ['.ql-list[value="bullet"]', 'aria-label', 'aria.bulletList'],
   ['.ql-clean', 'aria-label', 'aria.clearFormat'],
@@ -885,7 +907,9 @@ const STATIC_ATTRIBUTE_TRANSLATIONS = [
   ['#info-marker-content-media-split-slider', 'aria-label', 'label.popupWidth'],
   ['#editor-fullscreen-toggle', 'aria-label', 'aria.editorFullscreen'],
   ['#editor-fullscreen-toggle', 'title', 'fullscreen.button'],
-  ['#viewer-settings-toggle', 'aria-label', 'aria.viewerSettings']
+  ['#viewer-settings-toggle', 'aria-label', 'aria.viewerSettings'],
+  ['#preview-modal-close', 'aria-label', 'aria.closePreview'],
+  ['#preview-frame', 'title', 'preview.title']
 ];
 
 function getCurrentLanguage() {
@@ -1060,7 +1084,8 @@ const state = {
     ambientAudio: null,
     ambientAudioTransitionMs: DEFAULT_AMBIENT_AUDIO_TRANSITION_MS,
     ambientAudioOffset: DEFAULT_AMBIENT_AUDIO_OFFSET,
-    ambientAudioBackground: false
+    ambientAudioBackground: false,
+    showIntroOverlay: true
   },
   scenes: [],
   markers: [],
@@ -1117,6 +1142,7 @@ const runtime = {
   nodeMapSceneSelectionActive: false,
   pendingMarkerPlacement: null,
   confirmDialog: null,
+  previewDocumentUrls: [],
   transientStatus: null,
   transientStatusTimer: null,
   statusSheenLastAt: 0,
@@ -1191,6 +1217,7 @@ const elements = {
   projectAmbientAudioOffset: document.getElementById('project-ambient-audio-offset'),
   projectAmbientAudioOffsetSlider: document.getElementById('project-ambient-audio-offset-slider'),
   projectAmbientAudioBackground: document.getElementById('project-ambient-audio-background'),
+  projectShowIntro: document.getElementById('project-show-intro'),
   projectAmbientAudioSelect: document.getElementById('project-ambient-audio-select'),
   projectAmbientAudioClear: document.getElementById('project-ambient-audio-clear'),
   projectSummaryName: document.getElementById('project-summary-name'),
@@ -1223,6 +1250,7 @@ const elements = {
   soundMarkerAudioInput: document.getElementById('sound-marker-audio-input'),
   saveProject: document.getElementById('save-project'),
   loadProject: document.getElementById('load-project'),
+  previewProject: document.getElementById('preview-project'),
   exportProject: document.getElementById('export-project'),
   resetProject: document.getElementById('reset-project'),
   workspace: document.querySelector('.workspace'),
@@ -1336,6 +1364,10 @@ const elements = {
   confirmModalMessage: document.getElementById('confirm-modal-message'),
   confirmModalCancel: document.getElementById('confirm-modal-cancel'),
   confirmModalConfirm: document.getElementById('confirm-modal-confirm'),
+  previewModal: document.getElementById('preview-modal'),
+  previewModalBackdrop: document.getElementById('preview-modal-backdrop'),
+  previewModalClose: document.getElementById('preview-modal-close'),
+  previewFrame: document.getElementById('preview-frame'),
   sceneConfigDelete: document.getElementById('scene-config-delete'),
   infoMarkerConfigDelete: document.getElementById('info-marker-config-delete'),
   linkMarkerConfigDelete: document.getElementById('link-marker-config-delete'),
@@ -1371,12 +1403,101 @@ function initInfoMarkerContentEditor() {
       if (runtime.editingInfoMarkerContentId) {
         updateSelectedInfoMarkerContent();
       }
+      scheduleInfoMarkerLinkTooltipFit();
     });
+    runtime.infoMarkerContentEditor.on('selection-change', scheduleInfoMarkerLinkTooltipFit);
+    bindInfoMarkerLinkTooltipFit();
     return;
   }
 
   elements.infoMarkerContentInput.contentEditable = 'true';
   elements.infoMarkerContentInput.addEventListener('input', updateSelectedInfoMarkerContent);
+}
+
+function getInfoMarkerLinkTooltip() {
+  return elements.infoMarkerContentInput?.querySelector('.ql-tooltip') || null;
+}
+
+function getInfoMarkerLinkTooltipBounds() {
+  return elements.infoMarkerContentInput?.closest('.quill-shell')?.getBoundingClientRect() || null;
+}
+
+function fitInfoMarkerLinkTooltip() {
+  runtime.infoMarkerLinkTooltipFrame = null;
+  if (runtime.infoMarkerLinkTooltipFitting) {
+    return;
+  }
+
+  const tooltip = getInfoMarkerLinkTooltip();
+  const bounds = getInfoMarkerLinkTooltipBounds();
+  if (!tooltip || !bounds || tooltip.classList.contains('ql-hidden') || elements.infoMarkerContentOverlay?.hidden) {
+    return;
+  }
+
+  const tooltipRect = tooltip.getBoundingClientRect();
+  if (!tooltipRect.width || !tooltipRect.height) {
+    return;
+  }
+
+  const inset = 8;
+  let shiftX = 0;
+  let shiftY = 0;
+  const minLeft = bounds.left + inset;
+  const maxRight = bounds.right - inset;
+  const minTop = bounds.top + inset;
+  const maxBottom = bounds.bottom - inset;
+
+  if (tooltipRect.left < minLeft) {
+    shiftX = minLeft - tooltipRect.left;
+  } else if (tooltipRect.right > maxRight) {
+    shiftX = maxRight - tooltipRect.right;
+  }
+
+  if (tooltipRect.top < minTop) {
+    shiftY = minTop - tooltipRect.top;
+  } else if (tooltipRect.bottom > maxBottom) {
+    shiftY = maxBottom - tooltipRect.bottom;
+  }
+
+  if (Math.abs(shiftX) < 0.5 && Math.abs(shiftY) < 0.5) {
+    return;
+  }
+
+  const currentLeft = Number.parseFloat(tooltip.style.left);
+  const currentTop = Number.parseFloat(tooltip.style.top);
+  runtime.infoMarkerLinkTooltipFitting = true;
+  if (Number.isFinite(currentLeft)) {
+    tooltip.style.left = `${currentLeft + shiftX}px`;
+  }
+  if (Number.isFinite(currentTop)) {
+    tooltip.style.top = `${currentTop + shiftY}px`;
+  }
+  requestAnimationFrame(() => {
+    runtime.infoMarkerLinkTooltipFitting = false;
+  });
+}
+
+function scheduleInfoMarkerLinkTooltipFit() {
+  if (runtime.infoMarkerLinkTooltipFitting) {
+    return;
+  }
+  if (runtime.infoMarkerLinkTooltipFrame) {
+    cancelAnimationFrame(runtime.infoMarkerLinkTooltipFrame);
+  }
+  runtime.infoMarkerLinkTooltipFrame = requestAnimationFrame(fitInfoMarkerLinkTooltip);
+}
+
+function bindInfoMarkerLinkTooltipFit() {
+  const tooltip = getInfoMarkerLinkTooltip();
+  if (!tooltip) {
+    return;
+  }
+
+  const observer = new MutationObserver(scheduleInfoMarkerLinkTooltipFit);
+  observer.observe(tooltip, { attributes: true, attributeFilter: ['class', 'style'] });
+  runtime.infoMarkerLinkTooltipObserver = observer;
+  elements.infoMarkerContentOverlay?.addEventListener('scroll', scheduleInfoMarkerLinkTooltipFit, true);
+  window.addEventListener('resize', scheduleInfoMarkerLinkTooltipFit);
 }
 
 function syncInfoMarkerContentEditorTutorialLock() {
@@ -2087,6 +2208,10 @@ function getSaveLoadTutorialSteps() {
       text: 'El botón "Importar" carga un paquete del proyecto o un JSON anterior y restaura el proyecto completo dentro del editor.'
     },
     {
+      targetSelectors: ['#preview-project'],
+      text: 'El botón "Preview" abre el player standalone dentro del editor con el estado actual del tour. Sirve para revisar la experiencia final antes de exportar.'
+    },
+    {
       targetSelectors: ['#export-project'],
       text: 'El botón "Exportar" genera la salida final del tour con el player standalone y los archivos procesados necesarios para compartirlo o publicarlo.'
     },
@@ -2099,7 +2224,7 @@ function getSaveLoadTutorialSteps() {
         setActiveTab('instrucciones');
       },
       targetSelectors: ['#start-save-load-tutorial'],
-      text: 'Cuando quieras repasar cómo guardar, recuperar, exportar o reiniciar el proyecto, podrás volver a este tutorial desde la pestaña "Instrucciones" o desde el botón de ayuda de Comandos.'
+      text: 'Cuando quieras repasar cómo guardar, recuperar, previsualizar, exportar o reiniciar el proyecto, podrás volver a este tutorial desde la pestaña "Instrucciones" o desde el botón de ayuda de Comandos.'
     }
   ];
 }
@@ -2745,7 +2870,7 @@ async function startEffectsTutorial() {
 }
 
 function startSaveLoadTutorial() {
-  startTutorial('Guardar/Importar/Exportar proyecto', getSaveLoadTutorialSteps());
+  startTutorial('Guardar/Importar/Preview/Exportar proyecto', getSaveLoadTutorialSteps());
 }
 
 async function startNodeMapTutorial() {
@@ -2810,6 +2935,12 @@ function handleGlobalDeleteShortcut(event) {
       confirmDialogAction();
       return;
     }
+  }
+
+  if (event.key === 'Escape' && elements.previewModal && !elements.previewModal.hidden) {
+    event.preventDefault();
+    closeStandalonePreview();
+    return;
   }
 
   if (event.key === 'Escape' && runtime.viewerSettingsOpen) {
@@ -3937,6 +4068,7 @@ function bindEvents() {
   elements.projectAmbientAudioOffsetSlider?.addEventListener('input', () => updateProjectAmbientAudioTiming('slider'));
   elements.projectAmbientAudioOffsetSlider?.addEventListener('change', () => updateProjectAmbientAudioTiming('slider'));
   elements.projectAmbientAudioBackground?.addEventListener('change', updateProjectAmbientAudioMode);
+  elements.projectShowIntro?.addEventListener('change', updateProjectIntroMode);
   elements.projectAudioInput?.addEventListener('change', () => importAmbientAudioForTarget('project'));
 
   elements.viewerSettingsToggle?.addEventListener('click', (event) => {
@@ -4017,6 +4149,8 @@ function bindEvents() {
   elements.confirmModalCancel?.addEventListener('click', closeConfirmDialog);
   elements.confirmModalConfirm?.addEventListener('click', confirmDialogAction);
   elements.confirmModalBackdrop?.addEventListener('click', closeConfirmDialog);
+  elements.previewModalClose?.addEventListener('click', closeStandalonePreview);
+  elements.previewModalBackdrop?.addEventListener('click', closeStandalonePreview);
 
   elements.infoMarkerConfigName.addEventListener('input', updateSelectedInfoMarkerName);
   elements.infoMarkerConfigYaw.addEventListener('change', applySelectedInfoMarkerCoordinates);
@@ -4028,6 +4162,7 @@ function bindEvents() {
 
   elements.infoMarkerContentImageSelect.addEventListener('click', () => elements.infoMarkerContentImage.click());
   elements.infoMarkerContentImage.addEventListener('change', updateSelectedInfoMarkerImage);
+  elements.infoMarkerContentOverlay.addEventListener('paste', handleInfoMarkerContentPaste, true);
   elements.infoMarkerContentImageAlign.addEventListener('click', handleInfoMarkerContentAlignmentSelection);
   elements.infoMarkerContentTextAlign.addEventListener('click', handleInfoMarkerContentAlignmentSelection);
   elements.infoMarkerContentTextVerticalAlign.addEventListener('click', handleInfoMarkerContentAlignmentSelection);
@@ -4234,6 +4369,7 @@ function bindEvents() {
 
   elements.saveProject.addEventListener('click', saveProjectToJson);
   elements.loadProject.addEventListener('click', () => elements.projectFileInput.click());
+  elements.previewProject?.addEventListener('click', previewStandalonePlayer);
   elements.exportProject.addEventListener('click', exportStandalonePlayer);
   elements.resetProject.addEventListener('click', resetProject);
 
@@ -4319,7 +4455,8 @@ function normalizeProjectConfig(project = {}) {
     ambientAudio: normalizeAmbientAudioConfig(project.ambientAudio),
     ambientAudioTransitionMs: transitionMs,
     ambientAudioOffset: legacyOffset,
-    ambientAudioBackground: Boolean(project.ambientAudioBackground)
+    ambientAudioBackground: Boolean(project.ambientAudioBackground),
+    showIntroOverlay: project.showIntroOverlay !== false
   };
 }
 
@@ -5177,6 +5314,10 @@ function updateProjectAmbientAudioMode() {
   renderViewerSettingsPanel();
 }
 
+function updateProjectIntroMode() {
+  state.project.showIntroOverlay = Boolean(elements.projectShowIntro?.checked);
+}
+
 function updateProjectAmbientAudioTiming(source = 'number-commit') {
   const isSliderSource = source === 'slider';
   const isLiveNumberSource = source === 'number-live';
@@ -5699,6 +5840,9 @@ function renderProjectSummary() {
   elements.projectFovMin.value = String(state.project.minFovDeg);
   elements.projectFovMax.value = String(state.project.maxFovDeg);
   elements.projectSummaryName.textContent = name;
+  if (elements.projectShowIntro) {
+    elements.projectShowIntro.checked = state.project.showIntroOverlay !== false;
+  }
   renderProjectAmbientAudioControls();
 }
 
@@ -10107,6 +10251,27 @@ function escapeInfoMarkerHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function normalizeInfoMarkerLinkUrl(value) {
+  const rawValue = String(value || '').trim();
+  if (!rawValue) {
+    return '';
+  }
+
+  if (/^(https?:|mailto:|tel:)/i.test(rawValue)) {
+    return rawValue;
+  }
+
+  if (/^\/(?!\/)/.test(rawValue) || /^#/.test(rawValue)) {
+    return rawValue;
+  }
+
+  if (/^[\w.-]+\.[a-z]{2,}(?:[/?#].*)?$/i.test(rawValue)) {
+    return 'https://' + rawValue;
+  }
+
+  return '';
+}
+
 function normalizeInlineInfoMarkerNode(node) {
   if (!node) {
     return '';
@@ -10121,10 +10286,18 @@ function normalizeInlineInfoMarkerNode(node) {
   }
 
   const tagName = node.tagName.toLowerCase();
-  const allowedInlineTags = new Set(['strong', 'b', 'em', 'i', 'u', 's', 'span']);
+  const allowedInlineTags = new Set(['strong', 'b', 'em', 'i', 'u', 's', 'span', 'a']);
   const childHtml = Array.from(node.childNodes).map((child) => normalizeInlineInfoMarkerNode(child)).join('');
   if (!allowedInlineTags.has(tagName)) {
     return childHtml;
+  }
+
+  if (tagName === 'a') {
+    const href = normalizeInfoMarkerLinkUrl(node.getAttribute('href'));
+    if (!href) {
+      return childHtml;
+    }
+    return '<a href="' + escapeInfoMarkerHtml(href) + '" target="_blank" rel="noopener noreferrer">' + childHtml + '</a>';
   }
 
   const normalizedTag = tagName === 'b' ? 'strong' : (tagName === 'i' ? 'em' : tagName);
@@ -11417,26 +11590,62 @@ function refreshSelectedInfoMarkerPresentation(marker) {
   }
 }
 
-async function updateSelectedInfoMarkerImage() {
+function assignSelectedInfoMarkerMediaFile(file) {
   const draft = getInfoMarkerContentDraft();
-  const file = elements.infoMarkerContentImage.files?.[0];
   const marker = getSelectedMarker();
   if (!draft || !file) {
-    return;
+    return false;
   }
 
   const nextMedia = createInfoMarkerMediaAssetFromFile(file);
   if (!nextMedia) {
     window.alert(t('alert.selectMediaFile'));
-    elements.infoMarkerContentImage.value = '';
-    return;
+    return false;
   }
 
   releaseInfoMarkerDraftPendingMedia(draft, getInfoMarkerMediaSrc(marker));
   assignInfoMarkerMedia(draft, nextMedia);
   draft.ownsMediaUrl = true;
   renderInfoMarkerContentPreview();
+  return true;
+}
+
+async function updateSelectedInfoMarkerImage() {
+  const file = elements.infoMarkerContentImage.files?.[0];
+  assignSelectedInfoMarkerMediaFile(file);
   elements.infoMarkerContentImage.value = '';
+}
+
+function getImageFileFromClipboardEvent(event) {
+  const clipboardData = event?.clipboardData;
+  if (!clipboardData) {
+    return null;
+  }
+
+  const files = Array.from(clipboardData.files || []);
+  const fileMatch = files.find((file) => String(file?.type || '').toLowerCase().startsWith('image/'));
+  if (fileMatch) {
+    return fileMatch;
+  }
+
+  const items = Array.from(clipboardData.items || []);
+  const itemMatch = items.find((item) => item.kind === 'file' && String(item.type || '').toLowerCase().startsWith('image/'));
+  return itemMatch ? itemMatch.getAsFile() : null;
+}
+
+function handleInfoMarkerContentPaste(event) {
+  if (elements.infoMarkerContentOverlay?.hidden) {
+    return;
+  }
+
+  const imageFile = getImageFileFromClipboardEvent(event);
+  if (!imageFile) {
+    return;
+  }
+
+  event.preventDefault();
+  event.stopPropagation();
+  assignSelectedInfoMarkerMediaFile(imageFile);
 }
 
 function clearSelectedInfoMarkerImage() {
@@ -13383,8 +13592,190 @@ async function saveProjectPackage() {
     window.alert(t('alert.saveProjectFailed'));
   }
 }
+
+async function fetchRequiredText(url, errorMessage) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(errorMessage);
+  }
+  return response.text();
+}
+
+function getStandaloneReadyScenes() {
+  return state.scenes.filter((scene) => scene.processed.mode === 'multires-listo');
+}
+
+function buildPreviewSceneTileUrlMap(scene) {
+  const tileUrls = {};
+  Object.entries(scene?.processed?.tiles || {}).forEach(([tileKey, tileUrl]) => {
+    if (!tileUrl) {
+      return;
+    }
+    tileUrls[tileKey] = tileUrl;
+    tileUrls[`${tileKey}.jpg`] = tileUrl;
+  });
+  return tileUrls;
+}
+
+function buildStandalonePreviewPayload(readyScenes) {
+  const projectAmbientAudio = normalizeAmbientAudioConfig(state.project.ambientAudio);
+  const scenes = readyScenes.map((scene) => {
+    const sceneAmbientAudio = normalizeAmbientAudioConfig(scene.ambientAudio);
+    return {
+      id: scene.id,
+      name: scene.name,
+      fileName: scene.fileName,
+      levels: scene.processed.levels,
+      faceSize: scene.processed.faceSize,
+      initialViewParameters: scene.initialViewParameters,
+      ambientAudio: serializePackagedAmbientAudioConfig(scene.ambientAudio, sceneAmbientAudio?.src ? sceneAmbientAudio.src : ''),
+      ambientAudioSyncTimeline: Boolean(scene.ambientAudioSyncTimeline),
+      previewUrl: scene.processed.previewUrl,
+      tileUrls: buildPreviewSceneTileUrlMap(scene)
+    };
+  });
+
+  const exportedSceneIds = new Set(readyScenes.map((scene) => scene.id));
+  const markers = state.markers
+    .filter((item) => exportedSceneIds.has(item.sceneId))
+    .filter((item) => normalizeMarkerType(item.type) !== 'link' || exportedSceneIds.has(item.targetSceneId))
+    .map((marker) => {
+      const mediaKind = getInfoMarkerMediaKind(marker);
+      const mediaSrc = getInfoMarkerMediaSrc(marker);
+      const soundSrc = getSoundMarkerAudioSrc(marker);
+      return {
+        id: marker.id,
+        name: marker.name,
+        type: normalizeMarkerType(marker.type),
+        sceneId: marker.sceneId,
+        yaw: marker.yaw,
+        pitch: marker.pitch,
+        content: marker.content || '',
+        contentHtml: getInfoMarkerContentHtml(marker),
+        imageSrc: '',
+        mediaKind,
+        mediaSrc: mediaKind ? mediaSrc : '',
+        mediaMimeType: mediaKind ? getInfoMarkerMediaMimeType(marker) : '',
+        mediaFileName: mediaKind ? getInfoMarkerMediaFileName(marker) : '',
+        imageAlign: getInfoMarkerImageAlign(marker),
+        textAlign: getInfoMarkerTextAlign(marker),
+        textVerticalAlign: getInfoMarkerTextVerticalAlign(marker),
+        popupWidth: getInfoMarkerPopupWidth(marker),
+        mediaSplit: getInfoMarkerMediaSplit(marker),
+        soundSrc,
+        soundMimeType: getSoundMarkerAudioFileName(marker) ? getSoundMarkerAudioMimeType(marker) : '',
+        soundFileName: getSoundMarkerAudioFileName(marker),
+        soundVolume: getSoundMarkerVolume(marker),
+        soundPan: getSoundMarkerPan(marker),
+        soundFocusDeg: getSoundMarkerFocusDeg(marker),
+        soundLoop: shouldSoundMarkerLoop(marker),
+        targetSceneId: marker.targetSceneId || null,
+        targetViewParameters: marker.targetViewParameters ? getLinkMarkerTargetViewParameters(marker, getTargetSceneForMarker(marker)) : null,
+        transition: marker.transition || 'fade',
+        transitionDurationMs: getLinkMarkerTransitionDurationMs(marker),
+        centerBeforeTransition: Boolean(marker.centerBeforeTransition),
+        flareColor: getLightMarkerColor(marker),
+        flareRadius: getLightMarkerRadius(marker),
+        flareIntensity: getLightMarkerIntensity(marker),
+        ghostIntensity: getLightMarkerGhostIntensity(marker)
+      };
+    });
+
+  return {
+    projectName: state.project.name || t('project.defaultExportName'),
+    language: getCurrentLanguage(),
+    projectAmbientAudio: serializePackagedAmbientAudioConfig(state.project.ambientAudio, projectAmbientAudio?.src ? projectAmbientAudio.src : ''),
+    projectAmbientAudioTransitionMs: getProjectAmbientAudioTimingConfig().transitionMs,
+    projectAmbientAudioOffset: getProjectAmbientAudioTimingConfig().offset,
+    projectAmbientAudioBackground: Boolean(state.project.ambientAudioBackground),
+    showIntroOverlay: state.project.showIntroOverlay !== false,
+    previewFaceOrder: PREVIEW_FACE_ORDER.join(''),
+    minFov: getProjectFovConfig().minRad,
+    maxFov: getProjectFovConfig().maxRad,
+    startSceneId: state.startSceneId || readyScenes[0]?.id || null,
+    scenes,
+    markers
+  };
+}
+
+function revokeStandalonePreviewUrls() {
+  runtime.previewDocumentUrls.forEach((url) => URL.revokeObjectURL(url));
+  runtime.previewDocumentUrls = [];
+}
+
+function closeStandalonePreview() {
+  if (elements.previewFrame) {
+    elements.previewFrame.src = 'about:blank';
+  }
+  if (elements.previewModal) {
+    elements.previewModal.hidden = true;
+  }
+  revokeStandalonePreviewUrls();
+}
+
+function stripInjectedDevServerScripts(html) {
+  return String(html || '')
+    .replace(/<!--\s*Code injected by (?:live-server|five-server)\s*-->\s*<script\b[^>]*>[\s\S]*?<\/script>\s*/giu, '')
+    .replace(/<script\b(?=[^>]*(?:data-id=["']five-server["']|id=["']__bs_script__|src=["'][^"']*(?:livereload|browser-sync)))[\s\S]*?<\/script>\s*/giu, '')
+    .replace(/<script\b[^>]*>[\s\S]*?new\s+WebSocket\s*\([\s\S]*?\/ws[\s\S]*?<\/script>\s*/giu, '');
+}
+
+async function buildStandalonePreviewDocumentUrl(payload) {
+  const [marzipanoSource, packagedIndexHtml, packagedStyleCss, packagedIndexScript] = await Promise.all([
+    fetchRequiredText('./lib/marzipano.js', 'No se pudo leer el runtime de Marzipano para el preview.'),
+    fetchRequiredText('./export-player/index.html', 'No se pudo leer la plantilla HTML del player para el preview.'),
+    fetchRequiredText('./export-player/style.css', 'No se pudo leer la plantilla CSS del player para el preview.'),
+    fetchRequiredText('./export-player/index.js', 'No se pudo leer la plantilla JS del player para el preview.')
+  ]);
+
+  const styleUrl = URL.createObjectURL(new Blob([packagedStyleCss], { type: 'text/css' }));
+  const marzipanoUrl = URL.createObjectURL(new Blob([marzipanoSource], { type: 'text/javascript' }));
+  const dataUrl = URL.createObjectURL(new Blob([buildPackagedDataScript(payload)], { type: 'text/javascript' }));
+  const scriptUrl = URL.createObjectURL(new Blob([packagedIndexScript], { type: 'text/javascript' }));
+  const documentHtml = stripInjectedDevServerScripts(packagedIndexHtml)
+    .replaceAll('__PROJECT_TITLE__', escapeHtml(payload.projectName || t('project.defaultExportName')))
+    .replaceAll('__APP_LANGUAGE__', payload.language || getCurrentLanguage())
+    .replaceAll('app-files/style.css', styleUrl)
+    .replaceAll('app-files/marzipano.js', marzipanoUrl)
+    .replaceAll('app-files/data.js', dataUrl)
+    .replaceAll('app-files/index.js', scriptUrl);
+  const documentUrl = URL.createObjectURL(new Blob([documentHtml], { type: 'text/html' }));
+  runtime.previewDocumentUrls = [documentUrl, styleUrl, marzipanoUrl, dataUrl, scriptUrl];
+  return documentUrl;
+}
+
+async function previewStandalonePlayer() {
+  const readyScenes = getStandaloneReadyScenes();
+
+  if (!readyScenes.length) {
+    window.alert(t('alert.noReadyScenes'));
+    return;
+  }
+
+  const previousStatus = getStatusText();
+  setStatusText(t('export.previewStandalone'));
+
+  try {
+    closeStandalonePreview();
+    const payload = buildStandalonePreviewPayload(readyScenes);
+    const previewUrl = await buildStandalonePreviewDocumentUrl(payload);
+    if (elements.previewFrame) {
+      elements.previewFrame.src = previewUrl;
+    }
+    if (elements.previewModal) {
+      elements.previewModal.hidden = false;
+    }
+  } catch (error) {
+    console.error(error);
+    closeStandalonePreview();
+    window.alert(error && error.message ? error.message : t('alert.previewFailed'));
+  } finally {
+    setStatusText(previousStatus);
+  }
+}
+
 async function exportStandalonePlayer() {
-  const readyScenes = state.scenes.filter((scene) => scene.processed.mode === 'multires-listo');
+  const readyScenes = getStandaloneReadyScenes();
 
   if (!readyScenes.length) {
     window.alert(t('alert.noReadyScenes'));
@@ -13398,14 +13789,6 @@ async function exportStandalonePlayer() {
   setStatusText(t('export.packagingStandalone'));
 
   try {
-    const fetchRequiredText = async (url, errorMessage) => {
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(errorMessage);
-      }
-      return response.text();
-    };
-
     const [marzipanoSource, packagedIndexHtml, packagedStyleCss, packagedIndexScript] = await Promise.all([
       fetchRequiredText('./lib/marzipano.js', 'No se pudo leer el runtime de Marzipano para el export.'),
       fetchRequiredText('./export-player/index.html', 'No se pudo leer la plantilla HTML del player standalone.'),
@@ -13570,6 +13953,7 @@ async function exportStandalonePlayer() {
         projectAmbientAudioTransitionMs: getProjectAmbientAudioTimingConfig().transitionMs,
         projectAmbientAudioOffset: getProjectAmbientAudioTimingConfig().offset,
         projectAmbientAudioBackground: Boolean(state.project.ambientAudioBackground),
+        showIntroOverlay: state.project.showIntroOverlay !== false,
         previewFaceOrder: PREVIEW_FACE_ORDER.join(''),
         minFov: getProjectFovConfig().minRad,
         maxFov: getProjectFovConfig().maxRad,
@@ -13609,6 +13993,7 @@ function resetProject() {
       state.project.ambientAudioTransitionMs = DEFAULT_AMBIENT_AUDIO_TRANSITION_MS;
       state.project.ambientAudioOffset = DEFAULT_AMBIENT_AUDIO_OFFSET;
       state.project.ambientAudioBackground = false;
+      state.project.showIntroOverlay = true;
       resetProjectAudioTimelineClock();
       state.scenes = [];
       state.markers = [];
@@ -13836,6 +14221,7 @@ async function hydrateState(payload, options = {}) {
   state.project.ambientAudioTransitionMs = nextProjectConfig.ambientAudioTransitionMs;
   state.project.ambientAudioOffset = nextProjectConfig.ambientAudioOffset;
   state.project.ambientAudioBackground = nextProjectConfig.ambientAudioBackground;
+  state.project.showIntroOverlay = nextProjectConfig.showIntroOverlay;
   resetProjectAudioTimelineClock();
   state.scenes = Array.isArray(payload?.scenes) ? payload.scenes.map(normalizeHydratedScene) : [];
   state.markers = Array.isArray(payload?.markers) ? payload.markers.map(normalizeHydratedMarker) : [];
@@ -14357,6 +14743,7 @@ function buildPackagedDataScript(bundle) {
     projectAmbientAudioTransitionMs: bundle.projectAmbientAudioTransitionMs,
     projectAmbientAudioOffset: bundle.projectAmbientAudioOffset,
     projectAmbientAudioBackground: bundle.projectAmbientAudioBackground,
+    showIntroOverlay: bundle.showIntroOverlay !== false,
     previewFaceOrder: bundle.previewFaceOrder,
     minFov: bundle.minFov,
     maxFov: bundle.maxFov,

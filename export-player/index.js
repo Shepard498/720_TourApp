@@ -59,6 +59,27 @@
       .replace(/'/g, '&#39;');
   }
 
+  function normalizeInfoMarkerLinkUrl(value) {
+    var rawValue = String(value || '').trim();
+    if (!rawValue) {
+      return '';
+    }
+
+    if (/^(https?:|mailto:|tel:)/i.test(rawValue)) {
+      return rawValue;
+    }
+
+    if (/^\/(?!\/)/.test(rawValue) || /^#/.test(rawValue)) {
+      return rawValue;
+    }
+
+    if (/^[\w.-]+\.[a-z]{2,}(?:[/?#].*)?$/i.test(rawValue)) {
+      return 'https://' + rawValue;
+    }
+
+    return '';
+  }
+
   function normalizeInlineInfoMarkerNode(node) {
     if (!node) {
       return '';
@@ -73,10 +94,18 @@
     }
 
     var tagName = node.tagName.toLowerCase();
-    var allowedInlineTags = new Set(['strong', 'b', 'em', 'i', 'u', 's', 'span']);
+    var allowedInlineTags = new Set(['strong', 'b', 'em', 'i', 'u', 's', 'span', 'a']);
     var childHtml = Array.from(node.childNodes).map(function(child) { return normalizeInlineInfoMarkerNode(child); }).join('');
     if (!allowedInlineTags.has(tagName)) {
       return childHtml;
+    }
+
+    if (tagName === 'a') {
+      var href = normalizeInfoMarkerLinkUrl(node.getAttribute('href'));
+      if (!href) {
+        return childHtml;
+      }
+      return '<a href="' + escapeInfoMarkerHtml(href) + '" target="_blank" rel="noopener noreferrer">' + childHtml + '</a>';
     }
 
     var normalizedTag = tagName === 'b' ? 'strong' : (tagName === 'i' ? 'em' : tagName);
@@ -370,6 +399,8 @@
       closeSceneList: 'Cerrar lista de escenas',
       sceneList: 'Lista de escenas',
       scenePrompt: 'Selecciona una escena del tour.',
+      introEyebrow: 'Tour 360',
+      startTour: 'Comenzar tour',
       fullscreen: 'Pantalla completa',
       exitFullscreen: 'Salir de pantalla completa',
       noAmbientAudio: 'Sin audio ambiente activo.',
@@ -394,6 +425,8 @@
       closeSceneList: 'Close scene list',
       sceneList: 'Scene list',
       scenePrompt: 'Select a tour scene.',
+      introEyebrow: '360 tour',
+      startTour: 'Start tour',
       fullscreen: 'Fullscreen',
       exitFullscreen: 'Exit fullscreen',
       noAmbientAudio: 'No ambient audio active.',
@@ -426,6 +459,9 @@
   var fullscreenToggleElement = document.getElementById('fullscreenToggle');
   var sceneBackdropElement = document.getElementById('sceneBackdrop');
   var sceneCloseElement = document.getElementById('sceneClose');
+  var tourIntroElement = document.getElementById('tourIntro');
+  var tourIntroTitleElement = document.getElementById('tourIntroTitle');
+  var tourIntroStartElement = document.getElementById('tourIntroStart');
   var viewer = new window.Marzipano.Viewer(panoElement, { controls: { mouseViewMode: 'drag' } });
   var lightOverlayElement = document.createElement('div');
   lightOverlayElement.className = 'viewer-stage__lights';
@@ -455,6 +491,7 @@
   var soundMarkerSceneTransition = null;
   var soundMarkerFreezeSceneId = null;
   var soundMarkerAudioUnlockBound = false;
+  var introDismissed = false;
 
   function normalizePlayerLanguage(value) {
     return value === 'en' ? 'en' : 'es';
@@ -506,6 +543,9 @@
     setInputText(viewerSettingsMuteElement, 'muteAudio');
     var sidebarPrompt = document.querySelector('.sidebar__header p');
     if (sidebarPrompt) { sidebarPrompt.textContent = t('scenePrompt'); }
+    setText('.tour-intro__eyebrow', 'introEyebrow');
+    if (tourIntroTitleElement) { tourIntroTitleElement.textContent = data.projectName || document.title || ''; }
+    if (tourIntroStartElement) { tourIntroStartElement.textContent = t('startTour'); }
   }
 
   applyStaticTranslations();
@@ -1190,6 +1230,13 @@ function fadeOutAmbientAudio() {
   }
 
   function syncAmbientAudioPlayback() {
+    if (shouldShowIntroOverlay()) {
+      stopProjectBackgroundAmbientAudio();
+      fadeOutAmbientAudio();
+      renderViewerSettings();
+      return;
+    }
+
     syncProjectBackgroundAmbientAudio();
     var effective = isProjectAmbientAudioBackgroundEnabled()
       ? (getSceneAmbientAudioConfig() ? { scope: 'scene', config: getSceneAmbientAudioConfig(), syncTimeline: isSceneAmbientAudioTimelineSynced() } : null)
@@ -1577,6 +1624,11 @@ function toggleViewerSettings(forceOpen) {
       return;
     }
 
+    if (shouldShowIntroOverlay()) {
+      clearActiveSceneSoundMarkers();
+      return;
+    }
+
     if (soundMarkerFreezeSceneId && activeSceneEntry && soundMarkerFreezeSceneId === activeSceneEntry.data.id) {
       return;
     }
@@ -1873,6 +1925,9 @@ function toggleViewerSettings(forceOpen) {
     });
   }
 
+  if (tourIntroStartElement) {
+    tourIntroStartElement.addEventListener('click', dismissIntroOverlay);
+  }
 
   if (viewerSettingsToggleElement) {
     viewerSettingsToggleElement.addEventListener('click', function(event) {
@@ -1940,6 +1995,10 @@ function toggleViewerSettings(forceOpen) {
       }
     }
 
+    resumeAmbientAudioAfterUnlock();
+  }, true);
+
+  function resumeAmbientAudioAfterUnlock() {
     if (projectBackgroundAudioElement && projectBackgroundAudioElement.paused && !ambientMuted && projectBackgroundAudioElement.volume > 0) {
       var backgroundPlay = projectBackgroundAudioElement.play();
       if (backgroundPlay && typeof backgroundPlay.catch === 'function') {
@@ -1958,14 +2017,22 @@ function toggleViewerSettings(forceOpen) {
         transitionPlay.catch(function() {});
       }
     }
-  }, true);
+  }
+
+  function getSceneTileUrl(sceneData, key) {
+    var tileUrls = sceneData && sceneData.tileUrls;
+    if (tileUrls && typeof tileUrls === 'object') {
+      return tileUrls[key] || tileUrls[String(key).replace(/\.jpg$/, '')] || '';
+    }
+    return '';
+  }
 
   var scenes = data.scenes.map(function(sceneData) {
     var source = new window.Marzipano.ImageUrlSource(function(tile) {
       var key = String(tile.z) + '/' + tile.face + '/' + tile.y + '/' + tile.x + '.jpg';
-      return { url: 'app-files/tiles/' + sceneData.id + '/' + key };
+      return { url: getSceneTileUrl(sceneData, key) || 'app-files/tiles/' + sceneData.id + '/' + key };
     }, {
-      cubeMapPreviewUrl: 'app-files/tiles/' + sceneData.id + '/preview.jpg',
+      cubeMapPreviewUrl: sceneData.previewUrl || 'app-files/tiles/' + sceneData.id + '/preview.jpg',
       cubeMapPreviewFaceOrder: data.previewFaceOrder
     });
 
@@ -2050,6 +2117,26 @@ function toggleViewerSettings(forceOpen) {
     syncActiveSceneSoundPlayback();
   }
 
+  function shouldShowIntroOverlay() {
+    return data.showIntroOverlay !== false && !introDismissed && scenes.length > 0;
+  }
+
+  function renderIntroOverlay() {
+    if (!tourIntroElement) {
+      return;
+    }
+    tourIntroElement.hidden = !shouldShowIntroOverlay();
+  }
+
+  function dismissIntroOverlay() {
+    introDismissed = true;
+    renderIntroOverlay();
+    syncAmbientAudioPlayback();
+    resumeAmbientAudioAfterUnlock();
+    ensureSoundMarkerAudioContext();
+    syncActiveSceneSoundPlayback();
+  }
+
   if (viewerStageElement) {
     viewerStageElement.addEventListener('click', function(event) {
       if (event.target === viewerStageElement || event.target === panoElement) {
@@ -2072,8 +2159,10 @@ function toggleViewerSettings(forceOpen) {
     }) || scenes[0];
     renderSceneList(initialScene.data.id);
     switchScene(initialScene, 'fade');
+    renderIntroOverlay();
   } else {
     sceneTitleElement.textContent = t('noScenes');
+    renderIntroOverlay();
   }
 })();
 

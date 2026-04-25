@@ -86,8 +86,8 @@
             <span>Aprende a crear efectos light y ajustar su apariencia directamente sobre la escena.</span>
           </button>
           <button class="command-card" id="start-save-load-tutorial" type="button">
-            <strong>Guardar/Importar/Exportar proyecto</strong>
-            <span>Aprende a guardar tu trabajo, importar proyectos previos y exportar la versión final del tour.</span>
+            <strong>Guardar/Importar/Preview/Exportar proyecto</strong>
+            <span>Aprende a guardar tu trabajo, importar proyectos previos, previsualizar el player y exportar la versión final del tour.</span>
           </button>
           <button class="command-card" id="start-nodemap-tutorial" type="button">
             <strong>Editor rápido (Nodemap)</strong>
@@ -112,6 +112,10 @@
             <button class="command-card" id="load-project" type="button">
               <strong>Importar</strong>
               <span>Carga un paquete del proyecto o un JSON anterior y restaura el editor.</span>
+            </button>
+            <button class="command-card" id="preview-project" type="button">
+              <strong>Preview</strong>
+              <span>Abre el player standalone con el estado actual antes de exportar.</span>
             </button>
             <button class="command-card" id="export-project" type="button">
               <strong>Exportar</strong>
@@ -150,6 +154,17 @@
             </label>
           </div>
 
+          <div class="placeholder-card project-player-card">
+            <strong>Presentacion del player</strong>
+            <p>El player puede abrir con el nombre del tour sobre la primera escena antes de empezar.</p>
+            <label class="field field--checkbox">
+              <span>
+                <input id="project-show-intro" name="project-show-intro" type="checkbox" />
+                Mostrar pantalla inicial
+              </span>
+            </label>
+          </div>
+
           <div class="placeholder-card ambient-audio-card">
             <strong>Audio ambiente del proyecto</strong>
             <p id="project-ambient-audio-summary">No hay audio ambiente cargado para el proyecto.</p>
@@ -183,7 +198,7 @@
             </div>
           </div>
 
-          <div class="placeholder-card">
+          <div class="placeholder-card project-upcoming-card">
             <strong>Próximamente</strong>
             <p>Acá podemos agregar slug, portada, ajustes globales y parámetros de exportación.</p>
           </div>
@@ -438,6 +453,7 @@
                         <button class="ql-bold" type="button" aria-label="Negrita"></button>
                         <button class="ql-italic" type="button" aria-label="Italica"></button>
                         <button class="ql-underline" type="button" aria-label="Subrayado"></button>
+                        <button class="ql-link" type="button" aria-label="Enlace"></button>
                       </span>
                       <span class="ql-formats">
                         <button class="ql-list" value="ordered" type="button" aria-label="Lista numerada"></button>
@@ -810,6 +826,20 @@
       </div>
       <p class="tutorial-overlay__hint">Usa el boton Siguiente o la tecla Enter para continuar.</p>
     </aside>
+  </div>
+
+  <div class="preview-modal" id="preview-modal" hidden>
+    <div class="preview-modal__backdrop" id="preview-modal-backdrop"></div>
+    <div class="preview-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="preview-modal-title">
+      <div class="preview-modal__header">
+        <div>
+          <p class="preview-modal__eyebrow">Preview</p>
+          <h3 id="preview-modal-title">Preview del tour</h3>
+        </div>
+        <button class="scene-action preview-modal__close" id="preview-modal-close" type="button" aria-label="Cerrar preview">&times;</button>
+      </div>
+      <iframe class="preview-modal__frame" id="preview-frame" title="Preview del tour" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" allow="fullscreen; autoplay" allowfullscreen></iframe>
+    </div>
   </div>
 
   <div class="confirm-modal" id="confirm-modal" hidden>
