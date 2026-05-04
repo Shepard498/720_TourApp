@@ -1,8 +1,10 @@
 # 720 TourApp
 
-720 TourApp is a browser-based editor for building interactive 360 virtual tours. It lets a user import panoramic scenes, process them into Marzipano-compatible cube tiles, place interactive markers, configure project audio, edit scene links visually, and export a standalone tour player.
+720 TourApp is a browser-based editor for building interactive 360 virtual tours. It lets a user import panoramic image and video scenes, process image panoramas into Marzipano-compatible cube tiles, place interactive markers, configure project and scene audio, edit scene links visually, and export a standalone tour player.
 
 Author: Gonzalo Tejera
+
+Current release: 1.2.0
 
 ## What The App Does
 
@@ -13,12 +15,12 @@ The app is split into two related experiences:
 
 In the editor, a tour can include:
 
-- Multiple 360 scenes generated from imported panorama images.
+- Multiple 360 scenes generated from imported panorama images or video files.
 - Link hotspots that move between scenes.
-- Media/info hotspots with formatted text and image, video, or audio content.
+- Media hotspots with formatted text and image, video, or audio content.
 - Light effects placed directly over the panorama.
 - Directional sound markers.
-- Project-level and scene-level ambient audio.
+- Project-level and scene-level ambient audio with import and playback controls.
 - A node map for arranging scenes and creating links visually.
 - Guided tutorials backed by bundled sample tour assets.
 
@@ -42,7 +44,7 @@ In the editor, a tour can include:
 
 ### `index.html`
 
-Main editor markup. It defines the side navigation, project panel, scene list, marker/effects panels, node map, viewer stage, configuration overlays, tutorial overlay, and hidden file inputs.
+Main editor markup. It defines the side navigation, project panel, scene list, marker/effects panels, node map, viewer stage, configuration overlays, tutorial overlay, and hidden file inputs for scene, media, and audio import.
 
 The page loads:
 
@@ -58,7 +60,7 @@ Main editor application logic. This is where the state model, event binding, ren
 Important responsibilities include:
 
 - Keeping the in-memory `state` for project settings, scenes, markers, selected scene, selected marker, and processing status.
-- Building multiresolution cube-map scene assets from imported panorama images.
+- Building multiresolution cube-map scene assets from imported panorama images and handling imported 360 video scenes.
 - Rendering the editor panels, scene viewer, markers, effects, and node map.
 - Managing marker types: `link`, `info`, `light`, and `sound`.
 - Serializing projects to JSON or a packaged zip.
@@ -94,27 +96,28 @@ Bundled sample multiresolution tour assets used by the guided tutorials. These a
 
 1. Open the editor in a browser.
 2. Configure project settings such as name, FOV limits, and ambient audio.
-3. Import panorama images as scenes.
-4. The app processes scenes into cube faces and tile levels for efficient viewing.
+3. Import panorama images or supported video files as scenes.
+4. The app processes image scenes into cube faces and tile levels for efficient viewing.
 5. Select a start scene and adjust scene view settings.
 6. Add markers:
    - Link markers connect scenes.
-   - Info markers show formatted text and media.
+   - Media markers show formatted text and media.
    - Light markers add visual flare effects.
    - Sound markers add directional audio.
-7. Use the node map to organize scenes and create/edit relationships visually.
-8. Save a project package if the tour should be edited again later.
-9. Export a standalone player package when the tour is ready to publish.
+7. Import and preview project-level or scene-level ambient audio when the tour needs background playback.
+8. Use the node map to organize scenes and create/edit relationships visually.
+9. Save a project package if the tour should be edited again later.
+10. Export a standalone player package when the tour is ready to publish.
 
 ## Save, Import, And Export
 
 The app has three different persistence-related actions:
 
-- **Guardar** creates a project package intended for restoring work in the editor.
-- **Importar** reads a previous JSON or packaged project and hydrates the editor state.
-- **Exportar** creates a standalone player bundle for viewing the finished tour outside the editor.
+- **Save** creates a project package intended for restoring work in the editor.
+- **Import** reads a previous JSON or packaged project and hydrates the editor state.
+- **Export** creates a standalone player bundle for viewing the finished tour outside the editor.
 
-Project packages preserve editor data and binary assets needed to continue editing. Standalone exports are optimized for playback and include generated player files plus packaged scene/media/audio data.
+Project packages preserve editor data and binary assets needed to continue editing, including imported image, video, media, and audio assets. Standalone exports are optimized for playback and include generated player files plus packaged scene/media/audio data.
 
 ## Running Locally
 
@@ -140,7 +143,7 @@ Note: Quill is loaded from jsDelivr, so the rich-text editor needs network acces
 
 - The app is currently framework-free and keeps most editor behavior in `app.js`.
 - Marzipano is bundled locally, so the 360 viewer does not depend on an external Marzipano CDN.
-- The UI text is primarily Spanish.
+- The editor UI supports Spanish and English text, so English documentation should use English control names.
 - Imported scene and media assets are handled in browser memory using object URLs, data URLs, and packaged zip bytes.
 - The app creates zip files manually with stored entries; there is no external zip dependency.
 - Be careful when changing serialized project data. Update both save/export serialization and import/hydration paths.
@@ -148,10 +151,10 @@ Note: Quill is loaded from jsDelivr, so the rich-text editor needs network acces
 
 ## Key Concepts
 
-- **Scene**: A 360 panorama processed into Marzipano cube-map assets with preview and tile levels.
-- **Marker**: An interactive point placed in a scene. Supported marker types are link, info, light, and sound.
+- **Scene**: A 360 panorama or video scene. Image panoramas are processed into Marzipano cube-map assets with preview and tile levels.
+- **Marker**: An interactive point placed in a scene. Supported marker types are link, media, light, and sound.
 - **Link marker**: A marker that transitions the viewer from one scene to another.
-- **Info marker**: A marker that displays rich text and optional media.
+- **Media marker**: A marker that displays rich text and optional image, video, or audio content.
 - **Light marker**: A marker rendered as a visual light/flare effect.
 - **Sound marker**: A marker with directional audio behavior.
 - **Node map**: A visual graph-like editor for arranging scenes and managing scene relationships.
